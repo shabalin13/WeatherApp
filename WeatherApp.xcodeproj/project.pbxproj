@@ -25,6 +25,10 @@
 		B62343062AF27B8D00B49267 /* CitiesCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62343052AF27B8D00B49267 /* CitiesCoordinator.swift */; };
 		B623430B2AF27BD000B49267 /* CitiesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B623430A2AF27BD000B49267 /* CitiesViewController.swift */; };
 		B623430D2AF27BDC00B49267 /* CitiesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B623430C2AF27BDC00B49267 /* CitiesViewModel.swift */; };
+		B62343102AF28C9500B49267 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B623430F2AF28C9500B49267 /* NetworkService.swift */; };
+		B62343142AF28CFB00B49267 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62343132AF28CFA00B49267 /* Constants.swift */; };
+		B62343162AF28D2900B49267 /* NetworkRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62343152AF28D2900B49267 /* NetworkRouter.swift */; };
+		B62343182AF28FC800B49267 /* CurrentWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62343172AF28FC800B49267 /* CurrentWeather.swift */; };
 		C286AAC3575DCA167F5D8809 /* Pods_WeatherAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C12DCE5853D0C305BB489B /* Pods_WeatherAppTests.framework */; };
 		E5177E4152250236B81A6C63 /* Pods_WeatherApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 476B47FFE0A097661D5869F7 /* Pods_WeatherApp.framework */; };
 /* End PBXBuildFile section */
@@ -74,6 +78,10 @@
 		B62343052AF27B8D00B49267 /* CitiesCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesCoordinator.swift; sourceTree = "<group>"; };
 		B623430A2AF27BD000B49267 /* CitiesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesViewController.swift; sourceTree = "<group>"; };
 		B623430C2AF27BDC00B49267 /* CitiesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesViewModel.swift; sourceTree = "<group>"; };
+		B623430F2AF28C9500B49267 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		B62343132AF28CFA00B49267 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		B62343152AF28D2900B49267 /* NetworkRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRouter.swift; sourceTree = "<group>"; };
+		B62343172AF28FC800B49267 /* CurrentWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentWeather.swift; sourceTree = "<group>"; };
 		BBCCBE7C76EA1B1018ECD4D7 /* Pods-WeatherApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherApp.release.xcconfig"; path = "Target Support Files/Pods-WeatherApp/Pods-WeatherApp.release.xcconfig"; sourceTree = "<group>"; };
 		E5124303D89632118117DAA3 /* Pods_WeatherApp_WeatherAppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherApp_WeatherAppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7C8A3587827DF5A7A00F1A6 /* Pods-WeatherApp-WeatherAppUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherApp-WeatherAppUITests.release.xcconfig"; path = "Target Support Files/Pods-WeatherApp-WeatherAppUITests/Pods-WeatherApp-WeatherAppUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -132,9 +140,6 @@
 		B62342C22AF25D8B00B49267 /* WeatherApp */ = {
 			isa = PBXGroup;
 			children = (
-				B62343072AF27BA800B49267 /* CitiesModule */,
-				B62342FB2AF278EC00B49267 /* WeatherModule */,
-				B62342F62AF2780400B49267 /* Coordinators */,
 				B62342C32AF25D8B00B49267 /* AppDelegate.swift */,
 				B62342C52AF25D8B00B49267 /* SceneDelegate.swift */,
 				B62342C72AF25D8B00B49267 /* ViewController.swift */,
@@ -142,6 +147,12 @@
 				B62342D12AF25D8D00B49267 /* LaunchScreen.storyboard */,
 				B62342D42AF25D8D00B49267 /* Info.plist */,
 				B62342CC2AF25D8B00B49267 /* WeatherApp.xcdatamodeld */,
+				B62343122AF28CEE00B49267 /* Utils */,
+				B62343072AF27BA800B49267 /* CitiesModule */,
+				B62342FB2AF278EC00B49267 /* WeatherModule */,
+				B62342F62AF2780400B49267 /* Coordinators */,
+				B62343112AF28CD300B49267 /* Models */,
+				B623430E2AF28C8100B49267 /* Services */,
 			);
 			path = WeatherApp;
 			sourceTree = "<group>";
@@ -222,6 +233,31 @@
 				B623430A2AF27BD000B49267 /* CitiesViewController.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		B623430E2AF28C8100B49267 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				B623430F2AF28C9500B49267 /* NetworkService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		B62343112AF28CD300B49267 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B62343172AF28FC800B49267 /* CurrentWeather.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		B62343122AF28CEE00B49267 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				B62343132AF28CFA00B49267 /* Constants.swift */,
+				B62343152AF28D2900B49267 /* NetworkRouter.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 		D592CBC69FBB932F5B86243C /* Pods */ = {
@@ -505,6 +541,8 @@
 			files = (
 				B623430B2AF27BD000B49267 /* CitiesViewController.swift in Sources */,
 				B623430D2AF27BDC00B49267 /* CitiesViewModel.swift in Sources */,
+				B62343182AF28FC800B49267 /* CurrentWeather.swift in Sources */,
+				B62343162AF28D2900B49267 /* NetworkRouter.swift in Sources */,
 				B62342FA2AF2789000B49267 /* AppCoordinator.swift in Sources */,
 				B62342CE2AF25D8B00B49267 /* WeatherApp.xcdatamodeld in Sources */,
 				B62343042AF279A700B49267 /* WeatherCoordinator.swift in Sources */,
@@ -514,6 +552,8 @@
 				B62343022AF2793800B49267 /* WeatherViewModel.swift in Sources */,
 				B62343062AF27B8D00B49267 /* CitiesCoordinator.swift in Sources */,
 				B62342C42AF25D8B00B49267 /* AppDelegate.swift in Sources */,
+				B62343142AF28CFB00B49267 /* Constants.swift in Sources */,
+				B62343102AF28C9500B49267 /* NetworkService.swift in Sources */,
 				B62342C62AF25D8B00B49267 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
