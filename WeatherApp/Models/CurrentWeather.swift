@@ -14,6 +14,8 @@ struct CurrentWeather {
         case mainInfo = "main"
         case visibility
         case windInfo = "wind"
+        case rainInfo = "rain"
+        case snowInfo = "snow"
         case cloudsInfo = "clouds"
         case datetime = "dt"
         case systemInfo = "sys"
@@ -49,6 +51,14 @@ struct CurrentWeather {
         case windGust = "gust"
     }
     
+    enum RainInfoKeys: String, CodingKey {
+        case rain = "1h"
+    }
+    
+    enum SnowInfoKeys: String, CodingKey {
+        case snow = "1h"
+    }
+    
     enum CloudsInfoKeys: String, CodingKey {
         case clouds = "all"
     }
@@ -77,6 +87,9 @@ struct CurrentWeather {
     let windSpeed: Double
     let windDeg: Int
     let windGust: Double
+    
+    let rain: Double
+    let snow: Double
     
     let clouds: Int
     
@@ -143,7 +156,13 @@ extension CurrentWeather: Decodable {
         let windInfoContainer = try container.nestedContainer(keyedBy: WindInfoKeys.self, forKey: .windInfo)
         windSpeed = try windInfoContainer.decode(Double.self, forKey: .windSpeed)
         windDeg = try windInfoContainer.decode(Int.self, forKey: .windDeg)
-        windGust = try windInfoContainer.decode(Double.self, forKey: .windGust)
+        windGust = try windInfoContainer.decodeIfPresent(Double.self, forKey: .windGust) ?? 0
+        
+        let rainInfoContainer = try? container.nestedContainer(keyedBy: RainInfoKeys.self, forKey: .rainInfo)
+        rain = try rainInfoContainer?.decodeIfPresent(Double.self, forKey: .rain) ?? 0
+        
+        let snowInfoContainer = try? container.nestedContainer(keyedBy: SnowInfoKeys.self, forKey: .snowInfo)
+        snow = try snowInfoContainer?.decodeIfPresent(Double.self, forKey: .snow) ?? 0
         
         let cloudsInfoContainer = try container.nestedContainer(keyedBy: CloudsInfoKeys.self, forKey: .cloudsInfo)
         clouds = try cloudsInfoContainer.decode(Int.self, forKey: .clouds)
