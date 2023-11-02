@@ -12,10 +12,11 @@ enum NetworkRouter {
     
     case currentWeather(cityName: String)
     case hourlyForecastsInfo(cityName: String, hoursCount: Int)
+    case dailyForecastsInfo(cityName: String, daysCount: Int)
     
     var baseURL: URL {
         switch self {
-        case .currentWeather:
+        case .currentWeather, .dailyForecastsInfo:
             return URL(string: "https://api.openweathermap.org")!
         case .hourlyForecastsInfo:
             return URL(string: "https://pro.openweathermap.org")!
@@ -28,12 +29,14 @@ enum NetworkRouter {
             return "data/2.5/weather"
         case .hourlyForecastsInfo:
             return "data/2.5/forecast/hourly"
+        case .dailyForecastsInfo:
+            return "data/2.5/forecast/daily"
         }
     }
     
     var method: HTTPMethod {
         switch self {
-        case .currentWeather, .hourlyForecastsInfo:
+        case .currentWeather, .hourlyForecastsInfo, .dailyForecastsInfo:
             return .get
         }
     }
@@ -48,6 +51,12 @@ enum NetworkRouter {
         case .hourlyForecastsInfo(let cityName, let hoursCount):
             return ["q": cityName,
                     "cnt": String(hoursCount),
+                    "lang": Constants.NetworkServiceConstants.lang,
+                    "units": Constants.NetworkServiceConstants.units,
+                    "appid": Constants.NetworkServiceConstants.APIkey]
+        case .dailyForecastsInfo(let cityName, let daysCount):
+            return ["q": cityName,
+                    "cnt": String(daysCount),
                     "lang": Constants.NetworkServiceConstants.lang,
                     "units": Constants.NetworkServiceConstants.units,
                     "appid": Constants.NetworkServiceConstants.APIkey]

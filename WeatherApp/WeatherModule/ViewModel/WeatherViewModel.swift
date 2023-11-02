@@ -8,6 +8,7 @@
 protocol WeatherViewModelProtocol {
     
     func goToCities()
+    func getTempRequest()
     
 }
 
@@ -21,6 +22,20 @@ final class WeatherViewModel: WeatherViewModelProtocol {
     
     func goToCities() {
         coordinator.goToCities()
+    }
+    
+    func getTempRequest() {
+//        NetworkService().getCurrentWeather(cityName: "Kemerovo") { result in
+//            print(result)
+//        }
+        
+//        NetworkService().getHourlyForecastsInfo(cityName: "Kemerovo", hoursCount: 96) { result in
+//            print(result)
+//        }
+        
+        NetworkService().getDailyForecastsInfo(cityName: "Kemerovo", daysCount: 16) { result in
+            print(result)
+        }
     }
     
 }

@@ -11,6 +11,7 @@ import Alamofire
 protocol NetworkServiceProtocol {
     func getCurrentWeather(cityName: String, completionHandler: @escaping (Swift.Result<CurrentWeather, Error>) -> Void)
     func getHourlyForecastsInfo(cityName: String, hoursCount: Int, completionHandler: @escaping (Swift.Result<HourlyForecastsInfo, Error>) -> Void)
+    func getDailyForecastsInfo(cityName: String, daysCount: Int, completionHandler: @escaping (Swift.Result<DailyForecastsInfo, Error>) -> Void)
 }
 
 final class NetworkService: NetworkServiceProtocol {
@@ -18,6 +19,7 @@ final class NetworkService: NetworkServiceProtocol {
     enum NetworkServiceError: Error, LocalizedError {
         case getCurrentWeatherFailed
         case getHourlyForecastsInfoFailed
+        case getDailyForecastsInfoFailed
     }
     
     func getCurrentWeather(cityName: String, completionHandler: @escaping (Result<CurrentWeather, Error>) -> Void) {
@@ -38,6 +40,17 @@ final class NetworkService: NetworkServiceProtocol {
                 completionHandler(.success(hourlyForecastsInfo))
             case .failure(_):
                 completionHandler(.failure(NetworkServiceError.getHourlyForecastsInfoFailed))
+            }
+        }
+    }
+    
+    func getDailyForecastsInfo(cityName: String, daysCount: Int, completionHandler: @escaping (Result<DailyForecastsInfo, Error>) -> Void) {
+        AF.request(NetworkRouter.dailyForecastsInfo(cityName: cityName, daysCount: daysCount)).validate().responseDecodable(of: DailyForecastsInfo.self) { response in
+            switch response.result {
+            case .success(let dailyForecastsInfo):
+                completionHandler(.success(dailyForecastsInfo))
+            case .failure(_):
+                completionHandler(.failure(NetworkServiceError.getDailyForecastsInfoFailed))
             }
         }
     }

@@ -27,6 +27,8 @@ class WeatherViewController: UIViewController {
         self.navigationItem.title = "Weather"
         self.view.backgroundColor = .systemBackground
         
+        self.viewModel.getTempRequest()
+        
         setupToolBar()
     }
     
