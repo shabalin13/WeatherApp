@@ -9,9 +9,11 @@ import Foundation
 import Alamofire
 
 protocol NetworkServiceProtocol {
+    
     func getCurrentWeather(cityName: String, completionHandler: @escaping (Swift.Result<CurrentWeather, Error>) -> Void)
     func getHourlyForecastsInfo(cityName: String, hoursCount: Int, completionHandler: @escaping (Swift.Result<HourlyForecastsInfo, Error>) -> Void)
     func getDailyForecastsInfo(cityName: String, daysCount: Int, completionHandler: @escaping (Swift.Result<DailyForecastsInfo, Error>) -> Void)
+    
 }
 
 final class NetworkService: NetworkServiceProtocol {

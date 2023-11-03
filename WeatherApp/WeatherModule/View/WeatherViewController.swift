@@ -27,9 +27,12 @@ class WeatherViewController: UIViewController {
         self.navigationItem.title = "Weather"
         self.view.backgroundColor = .systemBackground
         
-        self.viewModel.getTempRequest()
-        
         setupToolBar()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.viewModel.getWeather()
     }
     
     private func setupToolBar() {

@@ -73,7 +73,7 @@ extension NetworkRouter: URLRequestConvertible {
         request.method = method
         request = try URLEncodedFormParameterEncoder(destination: .methodDependent).encode(parameters, into: request)
         
-        print(request)
+//        print(request)
         
         return request
     }
