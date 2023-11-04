@@ -6,10 +6,11 @@
 //
 
 import Dispatch
+import RxSwift
 
 protocol WeatherViewModelProtocol {
     
-    var weatherItem: WeatherItem? { get }
+    var weatherItem: PublishSubject<WeatherItem> { get }
     
     func goToCities()
     func getWeather()
@@ -27,7 +28,7 @@ final class WeatherViewModel: WeatherViewModelProtocol {
     private var hourlyForecastsInfo: HourlyForecastsInfo?
     private var dailyForecastsInfo: DailyForecastsInfo?
     
-    private(set) var weatherItem: WeatherItem?
+    private(set) var weatherItem = PublishSubject<WeatherItem>()
     
     init(coordinator: WeatherCoordinatorProtocol) {
         self.coordinator = coordinator
@@ -55,7 +56,7 @@ final class WeatherViewModel: WeatherViewModelProtocol {
         
         group.enter()
         DispatchQueue.global().async {
-            self.networkService.getHourlyForecastsInfo(cityName: self.cityName, hoursCount: 24) { result in
+            self.networkService.getHourlyForecastsInfo(cityName: self.cityName, hoursCount: 96) { result in
                 switch result {
                 case .success(let hourlyForecastsInfo):
                     self.hourlyForecastsInfo = hourlyForecastsInfo
@@ -79,16 +80,18 @@ final class WeatherViewModel: WeatherViewModelProtocol {
             }
         }
         
-        group.notify(queue: DispatchQueue.main) {
+        group.notify(queue: DispatchQueue.global()) {
             
             if let currentWeather = self.currentWeather,
                let hourlyForecastsInfo = self.hourlyForecastsInfo,
                let dailyForecastsInfo = self.dailyForecastsInfo {
-                self.weatherItem = WeatherItem(currentWeather: currentWeather, hourlyForecastsInfo: hourlyForecastsInfo, dailyForecastsInfo: dailyForecastsInfo)
+                let weatherItem = WeatherItem(currentWeather: currentWeather, hourlyForecastsInfo: hourlyForecastsInfo, dailyForecastsInfo: dailyForecastsInfo)
+                DispatchQueue.main.async {
+                    self.weatherItem.onNext(weatherItem)
+                }
             } else {
-                self.weatherItem = nil
+//                self.weatherItem.onError()
             }
-            print(self.weatherItem)
         }
         
     }
