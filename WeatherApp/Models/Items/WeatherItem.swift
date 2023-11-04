@@ -23,7 +23,7 @@ extension WeatherItem {
             weatherID: currentWeather.weatherID, 
             weatherName: currentWeather.weatherName,
             weatherDescription: currentWeather.weatherDescription,
-            iconName: IconIDtoIconNameMapping(rawValue: currentWeather.weatherID)!.iconName,
+            iconName: WeatherIDtoIconNameMapping(rawValue: currentWeather.weatherID)!.iconName,
             temperature: Int(currentWeather.temperature.rounded()),
             feelsTemperature: Int(currentWeather.feelsTemperature.rounded()),
             temperatureMin: Int(currentWeather.temperatureMin.rounded()),
@@ -44,12 +44,12 @@ extension WeatherItem {
             cityName: currentWeather.cityName)
         
         hourlyForecastItems = hourlyForecastsInfo.hourlyForecasts.map { hourlyForecast in
-            let iconName = IconIDtoIconNameMapping(rawValue: hourlyForecast.weatherID)!.iconName + hourlyForecast.partOfDay
+            let iconName = WeatherIDtoIconNameMapping(rawValue: hourlyForecast.weatherID)!.iconName + hourlyForecast.partOfDay
             return HourlyForecastItem(date: hourlyForecast.datetime, timezone: hourlyForecastsInfo.timezone, iconName: iconName, temperature: Int(hourlyForecast.temperature.rounded()))
         }
         
         dailyForecastItems = dailyForecastsInfo.dailyForecasts.map { dailyForecast in
-            let iconName = IconIDtoIconNameMapping(rawValue: dailyForecast.weatherID)!.iconName
+            let iconName = WeatherIDtoIconNameMapping(rawValue: dailyForecast.weatherID)!.iconName
             return DailyForecastItem(date: dailyForecast.datetime, iconName: iconName, temperatureMin: Int(dailyForecast.temperatureMin.rounded()), temperatureMax: Int(dailyForecast.temperatureMax.rounded()))
         }
         
