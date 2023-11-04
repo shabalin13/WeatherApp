@@ -10,7 +10,7 @@ struct CurrentWeatherItem: Hashable {
     let weatherID: Int
     let weatherName: String
     let weatherDescription: String
-    let iconID: String
+    let iconName: String
     
     let temperature: Int
     let feelsTemperature: Int

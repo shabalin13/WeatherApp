@@ -19,13 +19,11 @@ extension WeatherItem {
          hourlyForecastsInfo: HourlyForecastsInfo,
          dailyForecastsInfo: DailyForecastsInfo) {
         
-        // fix iconID to be converted for API id to my iconID
         currentWeatherItem = CurrentWeatherItem(
             weatherID: currentWeather.weatherID, 
             weatherName: currentWeather.weatherName,
             weatherDescription: currentWeather.weatherDescription,
-            // fix here
-            iconID: currentWeather.iconID,
+            iconName: IconIDtoIconNameMapping(rawValue: currentWeather.weatherID)!.iconName,
             temperature: Int(currentWeather.temperature.rounded()),
             feelsTemperature: Int(currentWeather.feelsTemperature.rounded()),
             temperatureMin: Int(currentWeather.temperatureMin.rounded()),
@@ -46,11 +44,13 @@ extension WeatherItem {
             cityName: currentWeather.cityName)
         
         hourlyForecastItems = hourlyForecastsInfo.hourlyForecasts.map { hourlyForecast in
-            HourlyForecastItem(date: hourlyForecast.datetime, iconID: hourlyForecast.iconID, temperature: Int(hourlyForecast.temperature.rounded()))
+            let iconName = IconIDtoIconNameMapping(rawValue: hourlyForecast.weatherID)!.iconName + hourlyForecast.partOfDay
+            return HourlyForecastItem(date: hourlyForecast.datetime, timezone: hourlyForecastsInfo.timezone, iconName: iconName, temperature: Int(hourlyForecast.temperature.rounded()))
         }
         
         dailyForecastItems = dailyForecastsInfo.dailyForecasts.map { dailyForecast in
-            DailyForecastItem(date: dailyForecast.datetime, iconID: dailyForecast.iconID, temperatureMin: Int(dailyForecast.temperatureMin.rounded()), temperatureMax: Int(dailyForecast.temperatureMax.rounded()))
+            let iconName = IconIDtoIconNameMapping(rawValue: dailyForecast.weatherID)!.iconName
+            return DailyForecastItem(date: dailyForecast.datetime, iconName: iconName, temperatureMin: Int(dailyForecast.temperatureMin.rounded()), temperatureMax: Int(dailyForecast.temperatureMax.rounded()))
         }
         
     }

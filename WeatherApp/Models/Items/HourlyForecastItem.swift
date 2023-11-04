@@ -10,7 +10,8 @@ typealias HourlyForecastItems = [HourlyForecastItem]
 struct HourlyForecastItem: Hashable {
     
     let date: Int
-    let iconID: String
+    let timezone: Int
+    let iconName: String
     let temperature: Int
     
 }
