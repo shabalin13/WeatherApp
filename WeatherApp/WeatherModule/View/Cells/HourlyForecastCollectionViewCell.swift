@@ -9,7 +9,7 @@ import UIKit
 
 class HourlyForecastCollectionViewCell: UICollectionViewCell {
     
-    static let reuseIdentifier = "ForecastCollectionViewCell"
+    static let reuseIdentifier = "HourlyForecastCollectionViewCell"
     
     lazy var stackView: UIStackView = {
         let stackView = UIStackView()

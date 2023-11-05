@@ -9,7 +9,7 @@ enum WeatherItemIdentifier: Hashable {
     
 //    case main
     case hourlyForecast(HourlyForecastItem)
-//    case dailyForecasts
+    case dailyForecast(DailyForecastItem)
 //    case wind
 //    case sun
 //    case feelsTemperature
@@ -21,6 +21,14 @@ enum WeatherItemIdentifier: Hashable {
     var hourlyForecast: HourlyForecastItem? {
         if case .hourlyForecast(let hourlyForecastItem) = self {
             return hourlyForecastItem
+        } else {
+            return nil
+        }
+    }
+    
+    var dailyForecast: DailyForecastItem? {
+        if case .dailyForecast(let dailyForecastItem) = self {
+            return dailyForecastItem
         } else {
             return nil
         }
