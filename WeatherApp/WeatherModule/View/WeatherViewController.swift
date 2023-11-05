@@ -12,23 +12,8 @@ class WeatherViewController: UIViewController {
     
     var viewModel: WeatherViewModelProtocol
     
-    private enum Section: Hashable {
-        case main
-        case hourlyForecasts
-        case dailyForecasts
-        case wind
-        case sun
-        case feelsTemperature
-        case precipitation
-        case visibility
-        case humidity
-        case pressure
-    }
-    
-    private var sections = [Section]()
-    
     private var collectionView: UICollectionView!
-    private var dataSource: UICollectionViewDiffableDataSource<Section, AnyHashable>!
+    private var dataSource: UICollectionViewDiffableDataSource<WeatherSectionIdentifier, WeatherItemIdentifier>!
     
     let disposeBag = DisposeBag()
     
@@ -54,18 +39,9 @@ class WeatherViewController: UIViewController {
         configureHierarchy()
         configureDataSource()
         
-        setupToolBar()
-        
         subscribe()
-    }
-    
-    private func subscribe() {
-        viewModel.weatherItem.subscribe(onNext: { weatherItem in
-//            self.navigationItem.title = "\(weather.temperature)"
-            self.createSnapshot(weatherItem: weatherItem)
-        })
-        .disposed(by: disposeBag)
         
+        setupToolBar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -73,19 +49,48 @@ class WeatherViewController: UIViewController {
         self.viewModel.getWeather()
     }
     
+    // MARK: RxSwift subsription
+    private func subscribe() {
+        viewModel.weatherItem.subscribe(onNext: { weatherItem in
+            self.createSnapshot(weatherItem: weatherItem)
+        })
+        .disposed(by: disposeBag)
+        
+    }
+    
     
     // MARK: CollectionView functions
     private func configureHierarchy() {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
         
+        collectionView.register(WeatherSectionHeaderView.self, forSupplementaryViewOfKind: SupplementaryViewKind.header, withReuseIdentifier: WeatherSectionHeaderView.reuseIdentifier)
+        collectionView.register(WeatherLineView.self, forSupplementaryViewOfKind: SupplementaryViewKind.line, withReuseIdentifier: WeatherLineView.reuseIdentifier)
+        
         collectionView.register(HourlyForecastCollectionViewCell.self, forCellWithReuseIdentifier: HourlyForecastCollectionViewCell.reuseIdentifier)
         
         view.addSubview(collectionView)
+        
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            collectionView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            collectionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 150),
+            collectionView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+            collectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
+        ])
     }
     
     private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, layoutEnvironment in
-            let section = self.sections[sectionIndex]
+            let section = self.viewModel.sections[sectionIndex]
+            
+            let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(44))
+            let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize, elementKind: SupplementaryViewKind.header, alignment: .top)
+//            headerItem.pinToVisibleBounds = true
+            
+            let lineItemHeight = 1 / layoutEnvironment.traitCollection.displayScale
+            let lineItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(lineItemHeight))
+            let lineItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: lineItemSize, elementKind: SupplementaryViewKind.line, alignment: .top)
+            lineItem.contentInsets = .init(top: 0, leading: 10, bottom: 0, trailing: 10)
             
             switch section {
             case .hourlyForecasts:
@@ -97,64 +102,80 @@ class WeatherViewController: UIViewController {
                 group.contentInsets = .init(top: 0, leading: 5, bottom: 0, trailing: 5)
                 
                 let section = NSCollectionLayoutSection(group: group)
-                section.contentInsets = .init(top: 0, leading: 10, bottom: 0, trailing: 10)
+                section.contentInsets = .init(top: 20, leading: 5, bottom: 20, trailing: 5)
                 section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
+                section.boundarySupplementaryItems = [lineItem, headerItem]
+                
+                let sectionBackground = NSCollectionLayoutDecorationItem.background(elementKind: DecorationViewKind.background)
+                section.decorationItems = [sectionBackground]
                 
                 return section
             default:
                 return nil
             }
         }
+        layout.register(WeatherSectionBackgroundView.self, forDecorationViewOfKind: DecorationViewKind.background)
         return layout
     }
     
     private func configureDataSource() {
-        dataSource = .init(collectionView: collectionView, cellProvider: { collectionView, indexPath, item in
-            
-            if let hourlyForecastItem = item as? HourlyForecastItem {
+        
+        dataSource = .init(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
+            let section = self.viewModel.sections[indexPath.section]
+            switch section {
+            case .hourlyForecasts:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HourlyForecastCollectionViewCell.reuseIdentifier, for: indexPath) as! HourlyForecastCollectionViewCell
+                cell.configureCell(hourlyForecastItem: itemIdentifier.hourlyForecast!)
                 
-                cell.configureCell(hourlyForecastItem: hourlyForecastItem)
                 return cell
-            } else {
-                fatalError("No such ItemIdentifierType")
+            default:
+                return nil
             }
-            
-//            let section = self.sections[indexPath.section]
-//            switch section {
-//            case .hourlyForecasts:
-//                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HourlyForecastCollectionViewCell.reuseIdentifier, for: indexPath) as! HourlyForecastCollectionViewCell
-//                
-//                cell.configureCell(hourlyForecastItem: <#T##HourlyForecastItem#>)
-//                return cell
-//            default:
-//                fatalError("Not yet implemented")
-//            }
         })
         
-//        createSnapshot()
+        dataSource.supplementaryViewProvider = { collectionView, kind, indexPath in
+            
+            let section = self.viewModel.sections[indexPath.section]
+            let sectionImageName: String
+            let sectionTitleName: String
+            
+            switch section {
+            case .hourlyForecasts(let imageName, let titleName):
+                sectionImageName = imageName
+                sectionTitleName = titleName
+            default:
+                sectionImageName = ""
+                sectionTitleName = ""
+            }
+            
+            if kind == SupplementaryViewKind.header {
+                let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: WeatherSectionHeaderView.reuseIdentifier, for: indexPath) as! WeatherSectionHeaderView
+                headerView.configureHeader(imageName: sectionImageName, titleName: sectionTitleName)
+                return headerView
+            } else if kind == SupplementaryViewKind.line {
+                let lineView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: WeatherLineView.reuseIdentifier, for: indexPath) as! WeatherLineView
+                return lineView
+            } else {
+                return nil
+            }
+        }
+        
     }
     
     private func createSnapshot(weatherItem: WeatherItem) {
-//        if let weatherItem = viewModel.weatherItem {
-//            var snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>()
-//            snapshot.appendSections([.hourlyForecasts])
-//
-////            let weatherItems = hourlyForecastItems.map { hourlyForecastItem in
-////                WeatherItem.hourlyForecast(hourlyForecastItem)
-////            }
-//            
-//            snapshot.appendItems(weatherItem.hourlyForecastItems, toSection: .hourlyForecasts)
-//            sections = snapshot.sectionIdentifiers
-//            
-//            dataSource.apply(snapshot, animatingDifferences: true)
-//        }
         
-        var snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>()
-        snapshot.appendSections([.hourlyForecasts])
+        var snapshot = NSDiffableDataSourceSnapshot<WeatherSectionIdentifier, WeatherItemIdentifier>()
         
-        snapshot.appendItems(weatherItem.hourlyForecastItems, toSection: .hourlyForecasts)
-        sections = snapshot.sectionIdentifiers
+        let hourlyForecastsSection = WeatherSectionIdentifier.hourlyForecasts(imageName: "clock", titleName: "Hourly forecast")
+        
+        snapshot.appendSections([hourlyForecastsSection])
+        
+        let hourlyForecastItems = weatherItem.hourlyForecastItems.map { hourlyForecastItem in
+            WeatherItemIdentifier.hourlyForecast(hourlyForecastItem)
+        }
+        
+        snapshot.appendItems(hourlyForecastItems, toSection: hourlyForecastsSection)
+        self.viewModel.sections = snapshot.sectionIdentifiers
         
         dataSource.apply(snapshot, animatingDifferences: true)
     }

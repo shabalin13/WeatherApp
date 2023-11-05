@@ -48,6 +48,7 @@ class HourlyForecastCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        contentView.backgroundColor = .white.withAlphaComponent(0.5)
         contentView.layer.cornerRadius = 30
         contentView.layer.borderWidth = 1
         

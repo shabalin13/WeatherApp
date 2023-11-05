@@ -49,7 +49,7 @@ extension WeatherItem {
         }
         
         dailyForecastItems = dailyForecastsInfo.dailyForecasts.map { dailyForecast in
-            let iconName = WeatherIDtoIconNameMapping(rawValue: dailyForecast.weatherID)!.iconName
+            let iconName = WeatherIDtoIconNameMapping(rawValue: dailyForecast.weatherID)!.iconName + "d"
             return DailyForecastItem(date: dailyForecast.datetime, iconName: iconName, temperatureMin: Int(dailyForecast.temperatureMin.rounded()), temperatureMax: Int(dailyForecast.temperatureMax.rounded()))
         }
         

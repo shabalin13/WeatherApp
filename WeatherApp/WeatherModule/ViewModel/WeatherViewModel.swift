@@ -11,6 +11,7 @@ import RxSwift
 protocol WeatherViewModelProtocol {
     
     var weatherItem: PublishSubject<WeatherItem> { get }
+    var sections: [WeatherSectionIdentifier] { get set }
     
     func goToCities()
     func getWeather()
@@ -18,6 +19,8 @@ protocol WeatherViewModelProtocol {
 }
 
 final class WeatherViewModel: WeatherViewModelProtocol {
+    
+    var sections = [WeatherSectionIdentifier]()
     
     private var coordinator: WeatherCoordinatorProtocol
     private var networkService: NetworkServiceProtocol = NetworkService()
@@ -56,7 +59,7 @@ final class WeatherViewModel: WeatherViewModelProtocol {
         
         group.enter()
         DispatchQueue.global().async {
-            self.networkService.getHourlyForecastsInfo(cityName: self.cityName, hoursCount: 96) { result in
+            self.networkService.getHourlyForecastsInfo(cityName: self.cityName, hoursCount: 24) { result in
                 switch result {
                 case .success(let hourlyForecastsInfo):
                     self.hourlyForecastsInfo = hourlyForecastsInfo
