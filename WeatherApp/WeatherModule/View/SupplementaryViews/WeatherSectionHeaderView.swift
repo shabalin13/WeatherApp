@@ -39,6 +39,8 @@ class WeatherSectionHeaderView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+//        self.backgroundColor = .yellow.withAlphaComponent(0.3)
+        
         stackView.addArrangedSubview(imageView)
         stackView.addArrangedSubview(titleLabel)
         

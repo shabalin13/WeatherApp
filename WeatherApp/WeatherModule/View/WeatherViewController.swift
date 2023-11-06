@@ -68,15 +68,16 @@ class WeatherViewController: UIViewController {
         
         collectionView.register(HourlyForecastCollectionViewCell.self, forCellWithReuseIdentifier: HourlyForecastCollectionViewCell.reuseIdentifier)
         collectionView.register(DailyForecastCollectionViewCell.self, forCellWithReuseIdentifier: DailyForecastCollectionViewCell.reuseIdentifier)
+        collectionView.register(WindCollectionViewCell.self, forCellWithReuseIdentifier: WindCollectionViewCell.reuseIdentifier)
         
         view.addSubview(collectionView)
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             collectionView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
-            collectionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 150),
+            collectionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 10),
             collectionView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            collectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
+            collectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
         ])
     }
     
@@ -105,7 +106,7 @@ class WeatherViewController: UIViewController {
                 let section = NSCollectionLayoutSection(group: group)
                 section.contentInsets = .init(top: 20, leading: 5, bottom: 20, trailing: 5)
                 section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
-                section.boundarySupplementaryItems = [lineItem, headerItem]
+                section.boundarySupplementaryItems = [headerItem, lineItem]
                 
                 let sectionBackground = NSCollectionLayoutDecorationItem.background(elementKind: DecorationViewKind.background)
                 section.decorationItems = [sectionBackground]
@@ -115,14 +116,30 @@ class WeatherViewController: UIViewController {
                 let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
                 
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(44))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(50))
                 let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
 //                group.contentInsets = .init(top: 0, leading: 5, bottom: 0, trailing: 5)
                 
                 let section = NSCollectionLayoutSection(group: group)
-                section.contentInsets = .init(top: 20, leading: 5, bottom: 20, trailing: 5)
+                section.contentInsets = .init(top: 0, leading: 5, bottom: 20, trailing: 5)
 //                section.orthogonalScrollingBehavior = .continuous
-                section.boundarySupplementaryItems = [lineItem, headerItem]
+                section.boundarySupplementaryItems = [headerItem, lineItem]
+                
+                let sectionBackground = NSCollectionLayoutDecorationItem.background(elementKind: DecorationViewKind.background)
+                section.decorationItems = [sectionBackground]
+                return section
+            case .wind:
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(120))
+                let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+//                group.contentInsets = .init(top: 0, leading: 5, bottom: 0, trailing: 5)
+                
+                let section = NSCollectionLayoutSection(group: group)
+                section.contentInsets = .init(top: 0, leading: 5, bottom: 10, trailing: 5)
+//                section.orthogonalScrollingBehavior = .continuous
+                section.boundarySupplementaryItems = [headerItem]
                 
                 let sectionBackground = NSCollectionLayoutDecorationItem.background(elementKind: DecorationViewKind.background)
                 section.decorationItems = [sectionBackground]
@@ -156,6 +173,11 @@ class WeatherViewController: UIViewController {
                 cell.configureCell(dailyForecastItem: itemIdentifier.dailyForecast!)
                 
                 return cell
+            case .wind:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WindCollectionViewCell.reuseIdentifier, for: indexPath) as! WindCollectionViewCell
+                cell.configureCell(currentWeatherItem: itemIdentifier.wind!)
+                
+                return cell
             default:
                 return nil
             }
@@ -172,6 +194,9 @@ class WeatherViewController: UIViewController {
                 sectionImageName = imageName
                 sectionTitleName = titleName
             case .dailyForecasts(let imageName, let titleName):
+                sectionImageName = imageName
+                sectionTitleName = titleName
+            case .wind(let imageName, let titleName):
                 sectionImageName = imageName
                 sectionTitleName = titleName
             default:
@@ -199,8 +224,9 @@ class WeatherViewController: UIViewController {
         
         let hourlyForecastsSection = WeatherSectionIdentifier.hourlyForecasts(imageName: "clock", titleName: "Hourly forecast")
         let dailyForecastsSection = WeatherSectionIdentifier.dailyForecasts(imageName: "calendar", titleName: "10 days forecast")
+        let windSection = WeatherSectionIdentifier.wind(imageName: "wind", titleName: "Wind")
         
-        snapshot.appendSections([hourlyForecastsSection, dailyForecastsSection])
+        snapshot.appendSections([hourlyForecastsSection, dailyForecastsSection, windSection])
         
         let hourlyForecastItems = weatherItem.hourlyForecastItems.map { hourlyForecastItem in
             WeatherItemIdentifier.hourlyForecast(hourlyForecastItem)
@@ -212,6 +238,7 @@ class WeatherViewController: UIViewController {
         
         snapshot.appendItems(hourlyForecastItems, toSection: hourlyForecastsSection)
         snapshot.appendItems(dailyForecastItems, toSection: dailyForecastsSection)
+        snapshot.appendItems([WeatherItemIdentifier.wind(weatherItem.currentWeatherItem)], toSection: windSection)
         self.viewModel.sections = snapshot.sectionIdentifiers
         
         dataSource.apply(snapshot, animatingDifferences: true)

@@ -12,7 +12,7 @@ class WeatherSectionBackgroundView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.backgroundColor = UIColor(red: 46/255, green: 51/255, blue: 90/255, alpha: 0.5)
+        self.backgroundColor = .systemBlue.withAlphaComponent(0.5)
         self.layer.cornerRadius = 20
     }
     
