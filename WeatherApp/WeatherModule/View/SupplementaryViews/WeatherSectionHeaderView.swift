@@ -23,6 +23,8 @@ class WeatherSectionHeaderView: UICollectionReusableView {
     
     lazy var imageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+//        imageView.backgroundColor = .red.withAlphaComponent(0.5)
         
         return imageView
     }()
@@ -56,7 +58,8 @@ class WeatherSectionHeaderView: UICollectionReusableView {
 //            stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
 //            stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
 //            stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1)
+//            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1)
+//            imageView.heightAnchor.constraint(equalTo: stackView.heightAnchor)
         ])
     }
     

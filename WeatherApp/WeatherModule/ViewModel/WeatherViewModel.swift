@@ -88,7 +88,7 @@ final class WeatherViewModel: WeatherViewModelProtocol {
             if let currentWeather = self.currentWeather,
                let hourlyForecastsInfo = self.hourlyForecastsInfo,
                let dailyForecastsInfo = self.dailyForecastsInfo {
-                let weatherItem = WeatherItem(currentWeather: currentWeather, hourlyForecastsInfo: hourlyForecastsInfo, dailyForecastsInfo: dailyForecastsInfo)
+                let weatherItem = self.createWeatherItem(currentWeather: currentWeather, hourlyForecastsInfo: hourlyForecastsInfo, dailyForecastsInfo: dailyForecastsInfo)
                 DispatchQueue.main.async {
                     self.weatherItem.onNext(weatherItem)
                 }
@@ -96,6 +96,45 @@ final class WeatherViewModel: WeatherViewModelProtocol {
 //                self.weatherItem.onError()
             }
         }
+        
+    }
+    
+    private func createWeatherItem(currentWeather: CurrentWeather, hourlyForecastsInfo: HourlyForecastsInfo, dailyForecastsInfo: DailyForecastsInfo) -> WeatherItem {
+        
+        let hourlyForecastItems = hourlyForecastsInfo.hourlyForecasts.map { hourlyForecast in
+            let iconName = WeatherIDtoIconNameMapping(rawValue: hourlyForecast.weatherID)!.iconName + hourlyForecast.partOfDay
+            return HourlyForecastItem(date: hourlyForecast.datetime, timezone: hourlyForecastsInfo.timezone, iconName: iconName, temperature: Int(hourlyForecast.temperature.rounded()), probabilityOfPrecipitation: Int(hourlyForecast.probabilityOfPrecipitation * 100))
+        }
+        
+        let dailyForecastItems = dailyForecastsInfo.dailyForecasts.map { dailyForecast in
+            let iconName = WeatherIDtoIconNameMapping(rawValue: dailyForecast.weatherID)!.iconName + "d"
+            return DailyForecastItem(date: dailyForecast.datetime, timezone: dailyForecastsInfo.timezone, iconName: iconName, temperatureMin: Int(dailyForecast.temperatureMin.rounded()), temperatureMax: Int(dailyForecast.temperatureMax.rounded()), probabilityOfPrecipitation: Int(dailyForecast.probabilityOfPrecipitation * 100))
+        }
+        
+        let windItem = WindItem(speed: Int(currentWeather.windSpeed.rounded()), gust: Int(currentWeather.windGust.rounded()), deg: currentWeather.windDeg)
+        
+        let feelsTemperatureItem = FeelsTemperatureItem(feelsTemperature: Int(currentWeather.feelsTemperature.rounded()), temperature: Int(currentWeather.temperature.rounded()))
+        
+        let visibilityItem = VisibilityItem(visibility: currentWeather.visibility)
+        
+        let sunItem: SunItem = SunItem(sunriseTime: currentWeather.sunriseTime, sunsetTime: currentWeather.sunsetTime, timezone: currentWeather.timezone)
+        
+        let humidityItem = HumidityItem(humidity: currentWeather.humidity, temperature: currentWeather.temperature)
+        
+        let pressureItem = PressureItem(pressure: currentWeather.pressure)
+        
+        let precipitation = currentWeather.rain != 0 ? Int(currentWeather.rain.rounded()) : Int(currentWeather.snow.rounded())
+        
+        let rains24hours = hourlyForecastsInfo.hourlyForecasts.map { $0.rain }
+        let snows24hours = hourlyForecastsInfo.hourlyForecasts.map { $0.snow }
+        let rains10days = dailyForecastsInfo.dailyForecasts.map { ($0.rain, $0.datetime, dailyForecastsInfo.timezone) }
+        let snows10days = dailyForecastsInfo.dailyForecasts.map { ($0.snow, $0.datetime, dailyForecastsInfo.timezone) }
+        let expectedPrecipitation = ExpectedPrecipitation(rains24hours: rains24hours, snows24hours: snows24hours, rains10days: rains10days, snows10days: snows10days)
+        
+        let precipitationItem = PrecipitationItem(precipitation: precipitation, expectedPrecipitation: expectedPrecipitation)
+                                                                     
+                                                                     
+        return WeatherItem(hourlyForecastItems: hourlyForecastItems, dailyForecastItems: dailyForecastItems, windItem: windItem, feelsTemperatureItem: feelsTemperatureItem, visibilityItem: visibilityItem, sunItem: sunItem, humidityItem: humidityItem, pressureItem: pressureItem, precipitationItem: precipitationItem)
         
     }
     

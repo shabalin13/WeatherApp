@@ -13,5 +13,6 @@ struct HourlyForecastItem: Hashable {
     let timezone: Int
     let iconName: String
     let temperature: Int
+    let probabilityOfPrecipitation: Int
     
 }
