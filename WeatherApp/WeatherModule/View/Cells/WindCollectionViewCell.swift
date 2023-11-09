@@ -11,25 +11,25 @@ class WindCollectionViewCell: UICollectionViewCell {
     
     static let reuseIdentifier = "WindCollectionViewCell"
     
-    lazy var imageView: UIImageView = {
+    private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         
         return imageView
     }()
     
-    lazy var firstWindMiniCell: WindMiniCellView = {
+    private lazy var firstWindMiniCell: WindMiniCellView = {
         let cell = WindMiniCellView()
         
         return cell
     }()
     
-    lazy var secondWindMiniCell: WindMiniCellView = {
+    private lazy var secondWindMiniCell: WindMiniCellView = {
         let cell = WindMiniCellView()
         
         return cell
     }()
     
-    lazy var lineView: UIView = {
+    private lazy var lineView: UIView = {
         let view = UIView()
 //        view.backgroundColor = .lightGray
         view.backgroundColor = .black
@@ -52,20 +52,13 @@ class WindCollectionViewCell: UICollectionViewCell {
         secondWindMiniCell.translatesAutoresizingMaskIntoConstraints = false
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
-//        backgroundColor = .brown.withAlphaComponent(0.3)
-//        firstWindMiniCell.backgroundColor = .red.withAlphaComponent(0.3)
-//        secondWindMiniCell.backgroundColor = .blue.withAlphaComponent(0.3)
-//        imageView.backgroundColor = .orange.withAlphaComponent(0.3)
-        
         NSLayoutConstraint.activate([
             firstWindMiniCell.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
             firstWindMiniCell.topAnchor.constraint(equalTo: self.topAnchor),
             
-//            imageView.leadingAnchor.constraint(equalTo: firstWindMiniCell.trailingAnchor, constant: 5),
             imageView.topAnchor.constraint(equalTo: self.topAnchor),
             imageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5),
             imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-//            imageView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1),
             
             lineView.leadingAnchor.constraint(equalTo: firstWindMiniCell.leadingAnchor),
@@ -76,8 +69,6 @@ class WindCollectionViewCell: UICollectionViewCell {
             secondWindMiniCell.topAnchor.constraint(equalTo: lineView.bottomAnchor, constant: 5),
             secondWindMiniCell.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             
-//            firstWindMiniCell.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.6),
-//            secondWindMiniCell.widthAnchor.constraint(equalTo: firstWindMiniCell.widthAnchor, multiplier: 1),
             firstWindMiniCell.trailingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: -5),
             secondWindMiniCell.trailingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: -5),
             secondWindMiniCell.heightAnchor.constraint(equalTo: firstWindMiniCell.heightAnchor, multiplier: 1),

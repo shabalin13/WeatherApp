@@ -9,7 +9,7 @@ import UIKit
 
 class WindMiniCellView: UIView {
     
-    lazy var windSpeedLabel: UILabel = {
+    private lazy var windSpeedLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 35)
         label.numberOfLines = 1
@@ -18,7 +18,7 @@ class WindMiniCellView: UIView {
         return label
     }()
     
-    lazy var windUnitLabel: UILabel = {
+    private lazy var windUnitLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 15)
         label.textColor = .secondaryLabel
@@ -27,7 +27,7 @@ class WindMiniCellView: UIView {
         return label
     }()
     
-    lazy var windNameLabel: UILabel = {
+    private lazy var windNameLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20)
         label.numberOfLines = 1
@@ -35,7 +35,7 @@ class WindMiniCellView: UIView {
         return label
     }()
     
-    lazy var stackView: UIStackView = {
+    private lazy var stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.distribution = .fillProportionally

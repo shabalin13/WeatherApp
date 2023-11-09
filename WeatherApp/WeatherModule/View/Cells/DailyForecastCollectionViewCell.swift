@@ -11,7 +11,7 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
     
     static let reuseIdentifier = "DailyForecastCollectionViewCellr"
     
-    lazy var dateLabel: UILabel = {
+    private lazy var dateLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20)
         label.numberOfLines = 1
@@ -19,13 +19,13 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    lazy var imageView: UIImageView = {
+    private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         
         return imageView
     }()
     
-    lazy var temperatureMinLabel: UILabel = {
+    private lazy var temperatureMinLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20)
         label.numberOfLines = 1
@@ -34,13 +34,13 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    lazy var temperatureBar: UIProgressView = {
+    private lazy var temperatureBar: UIProgressView = {
         let progressView = UIProgressView()
         
         return progressView
     }()
     
-    lazy var temperatureMaxLabel: UILabel = {
+    private lazy var temperatureMaxLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20)
         label.numberOfLines = 1

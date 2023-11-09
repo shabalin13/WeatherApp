@@ -11,7 +11,7 @@ class HourlyForecastCollectionViewCell: UICollectionViewCell {
     
     static let reuseIdentifier = "HourlyForecastCollectionViewCell"
     
-    lazy var stackView: UIStackView = {
+    private lazy var stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.distribution = .fill
@@ -21,25 +21,23 @@ class HourlyForecastCollectionViewCell: UICollectionViewCell {
         return stackView
     }()
     
-    lazy var dateLabel: UILabel = {
+    private lazy var dateLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 15, weight: .semibold)
-//        label.textColor = .white
         label.numberOfLines = 1
         
         return label
     }()
     
-    lazy var temperatureLabel: UILabel = {
+    private lazy var temperatureLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20)
-//        label.textColor = .white
         label.numberOfLines = 1
         
         return label
     }()
     
-    lazy var imageView: UIImageView = {
+    private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         
         return imageView
