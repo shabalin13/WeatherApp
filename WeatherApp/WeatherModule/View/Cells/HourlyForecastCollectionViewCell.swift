@@ -11,10 +11,10 @@ class HourlyForecastCollectionViewCell: UICollectionViewCell {
     
     static let reuseIdentifier = "HourlyForecastCollectionViewCell"
     
-    private lazy var stackView: UIStackView = {
+    private lazy var biggerStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
-        stackView.distribution = .fill
+        stackView.distribution = .fillProportionally
         stackView.alignment = .center
         stackView.spacing = 8
         
@@ -37,39 +37,67 @@ class HourlyForecastCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    private lazy var smallerStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.distribution = .fillProportionally
+        stackView.alignment = .center
+        stackView.spacing = 0
+        
+        return stackView
+    }()
+    
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
         
         return imageView
+    }()
+    
+    private lazy var probabilityOfPrecipitationLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 13, weight: .semibold)
+        label.textColor = .secondaryLabel
+        label.numberOfLines = 1
+        
+        return label
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        contentView.backgroundColor = .white.withAlphaComponent(0.5)
-        contentView.layer.cornerRadius = 30
-        contentView.layer.borderWidth = 1
-        
-        stackView.addArrangedSubview(dateLabel)
-        stackView.addArrangedSubview(imageView)
-        stackView.addArrangedSubview(temperatureLabel)
-        
-        contentView.addSubview(stackView)
-        
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
-            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
-            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
-            
-            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1)
-        ])
+        setupView()
     }
     
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("This class does not support NSCoder")
+    }
+    
+    private func setupView() {
+        contentView.backgroundColor = .white.withAlphaComponent(0.5)
+        contentView.layer.cornerRadius = 30
+        contentView.layer.borderWidth = 1
+        
+        smallerStackView.addArrangedSubview(imageView)
+        smallerStackView.addArrangedSubview(probabilityOfPrecipitationLabel)
+        
+        biggerStackView.addArrangedSubview(dateLabel)
+        biggerStackView.addArrangedSubview(smallerStackView)
+        biggerStackView.addArrangedSubview(temperatureLabel)
+        
+        contentView.addSubview(biggerStackView)
+        
+        biggerStackView.translatesAutoresizingMaskIntoConstraints = false
+        let verticalOffset: CGFloat = 16
+        let horizontalOffset: CGFloat = 8
+        NSLayoutConstraint.activate([
+            biggerStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: verticalOffset),
+            biggerStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -verticalOffset),
+            biggerStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalOffset),
+            biggerStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalOffset),
+            imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor, multiplier: 1)
+        ])
     }
     
     func configureCell(hourlyForecastItem: HourlyForecastItem) {
@@ -81,6 +109,12 @@ class HourlyForecastCollectionViewCell: UICollectionViewCell {
         dateLabel.text = dateFormatter.string(from: date)
         
         imageView.image = UIImage(named: hourlyForecastItem.iconName)
+        
+        if hourlyForecastItem.probabilityOfPrecipitation == 0 {
+            probabilityOfPrecipitationLabel.text = " "
+        } else {
+            probabilityOfPrecipitationLabel.text = "\(hourlyForecastItem.probabilityOfPrecipitation) %"
+        }
         
         temperatureLabel.text = "\(hourlyForecastItem.temperature)°"
     }
