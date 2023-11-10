@@ -9,11 +9,28 @@ import UIKit
 
 class SquareCollectionViewCell: UICollectionViewCell {
     
+    private lazy var headerView: SquareItemHeaderView = {
+        let headerView = SquareItemHeaderView()
+        
+        return headerView
+    }()
+    
     static let reuseIdentifier = "SquareCollectionViewCell"
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.layer.cornerRadius = 20
+        self.backgroundColor = .systemBlue.withAlphaComponent(0.5)
+        
+        addSubview(headerView)
+        
+        headerView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            headerView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            headerView.topAnchor.constraint(equalTo: self.topAnchor),
+            headerView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            headerView.heightAnchor.constraint(equalToConstant: 35)
+        ])
     }
     
     @available(*, unavailable)
@@ -22,27 +39,33 @@ class SquareCollectionViewCell: UICollectionViewCell {
     }
     
     func configureCell(feelsTemperatureItem: FeelsTemperatureItem) {
-        self.backgroundColor = .yellow.withAlphaComponent(0.5)
+        headerView.configureHeader(imageName: "thermometer.medium", titleName: "Feels like")
+//        self.backgroundColor = .yellow.withAlphaComponent(0.5)
     }
     
     func configureCell(visibilityItem: VisibilityItem) {
-        self.backgroundColor = .red.withAlphaComponent(0.5)
+        headerView.configureHeader(imageName: "eye.fill", titleName: "Visibility")
+//        self.backgroundColor = .red.withAlphaComponent(0.5)
     }
     
     func configureCell(sunItem: SunItem) {
-        self.backgroundColor = .green.withAlphaComponent(0.5)
+        headerView.configureHeader(imageName: "sunrise.fill", titleName: "Sunrise")
+//        self.backgroundColor = .green.withAlphaComponent(0.5)
     }
     
     func configureCell(humidityItem: HumidityItem) {
-        self.backgroundColor = .purple.withAlphaComponent(0.5)
+        headerView.configureHeader(imageName: "humidity.fill", titleName: "Humidity")
+//        self.backgroundColor = .purple.withAlphaComponent(0.5)
     }
     
     func configureCell(pressureItem: PressureItem) {
-        self.backgroundColor = .brown.withAlphaComponent(0.5)
+        headerView.configureHeader(imageName: "gauge.medium", titleName: "Pressure")
+//        self.backgroundColor = .brown.withAlphaComponent(0.5)
     }
     
     func configureCell(precipitationItem: PrecipitationItem) {
-        self.backgroundColor = .black.withAlphaComponent(0.5)
+        headerView.configureHeader(imageName: "drop.fill", titleName: "Precipitation")
+//        self.backgroundColor = .black.withAlphaComponent(0.5)
     }
     
 }

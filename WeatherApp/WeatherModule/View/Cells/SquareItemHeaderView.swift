@@ -1,15 +1,13 @@
 //
-//  WeatherSectionHeaderView.swift
+//  SquareItemHeaderView.swift
 //  WeatherApp
 //
-//  Created by DIMbI4 on 04.11.2023.
+//  Created by DIMbI4 on 09.11.2023.
 //
 
 import UIKit
 
-class WeatherSectionHeaderView: UICollectionReusableView {
-    
-    static let reuseIdentifier = "WeatherSectionHeaderView"
+class SquareItemHeaderView: UIView {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -65,5 +63,5 @@ class WeatherSectionHeaderView: UICollectionReusableView {
 
         titleLabel.attributedText = titleString
     }
-    
+
 }
