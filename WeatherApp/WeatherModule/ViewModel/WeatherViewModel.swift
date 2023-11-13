@@ -135,8 +135,8 @@ final class WeatherViewModel: WeatherViewModelProtocol {
         let expectedPrecipitation = ExpectedPrecipitation(rains24hours: rains24hours, snows24hours: snows24hours, rains10days: rains10days, snows10days: snows10days)
         
         let precipitationItem = PrecipitationItem(precipitation: precipitation, expectedPrecipitation: expectedPrecipitation)
-                                                                     
-                                                                     
+        
+        
         return WeatherItem(hourlyForecastItems: hourlyForecastItems, dailyForecastItems: dailyForecastItems, windItem: windItem, feelsTemperatureItem: feelsTemperatureItem, visibilityItem: visibilityItem, sunItem: sunItem, humidityItem: humidityItem, pressureItem: pressureItem, precipitationItem: precipitationItem)
         
     }

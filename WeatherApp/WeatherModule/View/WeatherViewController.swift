@@ -209,20 +209,7 @@ class WeatherViewController: UIViewController {
                 return cell
             case .squares:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SquareCollectionViewCell.reuseIdentifier, for: indexPath) as! SquareCollectionViewCell
-                switch itemIdentifier.squares! {
-                case .feelsTemperature(let feelsTemperatureItem):
-                    cell.configureCell(feelsTemperatureItem: feelsTemperatureItem)
-                case .visibility(let visibilityItem):
-                    cell.configureCell(visibilityItem: visibilityItem)
-                case .sun(let sunItem):
-                    cell.configureCell(sunItem: sunItem)
-                case .humidity(let humidityItem):
-                    cell.configureCell(humidityItem: humidityItem)
-                case .pressure(let pressureItem):
-                    cell.configureCell(pressureItem: pressureItem)
-                case .precipitation(let precipitationItem):
-                    cell.configureCell(precipitationItem: precipitationItem)
-                }
+                cell.configureCell(squareItemIdentifier: itemIdentifier.squares!)
                 return cell
             default:
                 return nil
@@ -290,10 +277,10 @@ class WeatherViewController: UIViewController {
         
         let squaresItems = [WeatherItemIdentifier.squares(.feelsTemperature(weatherItem.feelsTemperatureItem)),
                             WeatherItemIdentifier.squares(.visibility(weatherItem.visibilityItem)),
-                            WeatherItemIdentifier.squares(.sun(weatherItem.sunItem)),
                             WeatherItemIdentifier.squares(.humidity(weatherItem.humidityItem)),
-                            WeatherItemIdentifier.squares(.pressure(weatherItem.pressureItem)),
-                            WeatherItemIdentifier.squares(.precipitation(weatherItem.precipitationItem))]
+                            WeatherItemIdentifier.squares(.precipitation(weatherItem.precipitationItem)),
+                            WeatherItemIdentifier.squares(.sun(weatherItem.sunItem)),
+                            WeatherItemIdentifier.squares(.pressure(weatherItem.pressureItem))]
         
         snapshot.appendItems(squaresItems, toSection: squaresSection)
         self.viewModel.sections = snapshot.sectionIdentifiers

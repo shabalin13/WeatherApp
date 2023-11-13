@@ -9,20 +9,33 @@ import Foundation
 
 struct HumidityItem: Hashable {
     
-    let humidity: Int
-    var dew_temperature: Int?
+    private let humidity: Int
+    private var dewTemperature: Int?
     
     init(humidity: Int, temperature: Double) {
         self.humidity = humidity
         
         if humidity == 0 {
-            self.dew_temperature = nil
+            self.dewTemperature = nil
         } else {
             let a = 17.27
             let b = 237.7
             let f = (a * temperature) / (b + temperature) + log(Double(humidity) / 100)
-            let dew_temperature = (b * f) / (a - f)
-            self.dew_temperature = Int(dew_temperature.rounded())
+            let dewTemperature = (b * f) / (a - f)
+            self.dewTemperature = Int(dewTemperature.rounded())
         }
     }
+    
+    var humidityString: String {
+        return "\(humidity)%"
+    }
+    
+    var dewTemperatureString: String? {
+        if let dewTemperature = dewTemperature {
+            return "The dew point is \(dewTemperature)° right now."
+        } else {
+            return nil
+        }
+    }
+    
 }

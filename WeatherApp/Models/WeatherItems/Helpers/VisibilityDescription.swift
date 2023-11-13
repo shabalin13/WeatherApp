@@ -34,17 +34,17 @@ enum VisibilityDescription: Hashable {
     var description: String {
         switch self {
         case .clear:
-            return "Clear view"
+            return "Clear view."
         case .fairlyClear:
-            return "Fairly clear view"
+            return "Fairly clear view."
         case .moderate:
-            return "Moderate view"
+            return "Moderate view."
         case .poor:
-            return "Poor view"
+            return "Poor view."
         case .veryPoor:
-            return "Very poor view"
+            return "Very poor view."
         case .undefined:
-            return "Undefined"
+            return "Undefined."
         }
     }
     

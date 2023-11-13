@@ -7,7 +7,24 @@
 
 struct PrecipitationItem: Hashable {
     
-    let precipitation: Int
-    let expectedPrecipitation: ExpectedPrecipitation
+    private let precipitation: Int
+    private let expectedPrecipitation: ExpectedPrecipitation
+    
+    init(precipitation: Int, expectedPrecipitation: ExpectedPrecipitation) {
+        self.precipitation = precipitation
+        self.expectedPrecipitation = expectedPrecipitation
+    }
+    
+    var precipitationString: String {
+        return "\(precipitation) mm"
+    }
+    
+    var precipitationAdditionalString: String {
+        return "in last hour"
+    }
+    
+    var expectedPrecipitationString: String {
+        return expectedPrecipitation.description
+    }
     
 }

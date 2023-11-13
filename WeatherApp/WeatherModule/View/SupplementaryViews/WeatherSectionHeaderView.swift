@@ -16,9 +16,6 @@ class WeatherSectionHeaderView: UICollectionReusableView {
         label.numberOfLines = 1
         label.textAlignment = .left
         
-//        label.textColor = UIColor.secondaryLabel
-//        label.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
-        
         return label
     }()
     

@@ -7,10 +7,15 @@
 
 struct PressureItem: Hashable {
     
-    let pressure: Int
+    private let pressure: Int
     
     init(pressure: Int) {
-        self.pressure = Int((Double(pressure) / 0.75006).rounded())
+        self.pressure = pressure
+    }
+    
+    var mmHgPressureString: String {
+        let mmHgPressure = Int((Double(pressure) * 0.75006).rounded())
+        return "\(mmHgPressure)"
     }
     
 }
