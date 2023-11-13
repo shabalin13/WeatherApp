@@ -33,7 +33,7 @@ class SquareItemHeaderView: UIView {
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         let verticalOffset: CGFloat = 0
-        let horizontalOffset: CGFloat = 15
+        let horizontalOffset: CGFloat = 20
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: verticalOffset),
             titleLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -verticalOffset),
@@ -46,7 +46,7 @@ class SquareItemHeaderView: UIView {
         let titleString = NSMutableAttributedString()
         
         let color = UIColor.secondaryLabel
-        let font = UIFont.systemFont(ofSize: 13)
+        let font = UIFont.systemFont(ofSize: 13, weight: .semibold)
         let textAttributes: [NSAttributedString.Key: Any] = [
             .font: font,
             .foregroundColor: color

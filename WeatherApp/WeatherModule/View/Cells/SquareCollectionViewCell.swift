@@ -19,7 +19,7 @@ class SquareCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.layer.cornerRadius = 20
+        self.layer.cornerRadius = 15
         self.backgroundColor = .systemBlue.withAlphaComponent(0.5)
         
         addSubview(headerView)

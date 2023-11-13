@@ -13,7 +13,7 @@ class WeatherSectionBackgroundView: UICollectionReusableView {
         super.init(frame: frame)
         
         self.backgroundColor = .systemBlue.withAlphaComponent(0.5)
-        self.layer.cornerRadius = 20
+        self.layer.cornerRadius = 15
     }
     
     @available(*, unavailable)

@@ -93,7 +93,7 @@ class WeatherViewController: UIViewController {
         view.addSubview(collectionView)
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        let collectionViewHorizontalOffset: CGFloat = 15
+        let collectionViewHorizontalOffset: CGFloat = 20
         let collectionViewVerticalOffset: CGFloat = 0
         NSLayoutConstraint.activate([
             collectionView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: collectionViewHorizontalOffset),
@@ -109,7 +109,7 @@ class WeatherViewController: UIViewController {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, layoutEnvironment in
             let sectionIdentifier = self.viewModel.sections[sectionIndex]
             
-            let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(35))
+            let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(38))
             let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize, elementKind: SupplementaryViewKind.header, alignment: .top)
 //            headerItem.pinToVisibleBounds = true
             
@@ -130,7 +130,7 @@ class WeatherViewController: UIViewController {
                 
                 let section = NSCollectionLayoutSection(group: group)
                 section.interGroupSpacing = 10
-                section.contentInsets = .init(top: 20, leading: 5, bottom: 20, trailing: 5)
+            section.contentInsets = .init(top: 15, leading: 10, bottom: 15, trailing: 10)
                 section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
                 section.boundarySupplementaryItems = [headerItem, lineItem]
                 
@@ -146,8 +146,8 @@ class WeatherViewController: UIViewController {
                 let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
                 
                 let section = NSCollectionLayoutSection(group: group)
-                section.contentInsets = .init(top: 0, leading: 5, bottom: 20, trailing: 5)
-                section.boundarySupplementaryItems = [headerItem, lineItem]
+                section.contentInsets = .init(top: 0, leading: 5, bottom: 0, trailing: 5)
+                section.boundarySupplementaryItems = [headerItem]
                 
                 let sectionBackground = NSCollectionLayoutDecorationItem.background(elementKind: DecorationViewKind.background)
                 section.decorationItems = [sectionBackground]

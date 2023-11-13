@@ -40,7 +40,7 @@ class HourlyForecastCollectionViewCell: UICollectionViewCell {
     private lazy var smallerStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
-        stackView.distribution = .fillProportionally
+        stackView.distribution = .fill
         stackView.alignment = .center
         stackView.spacing = 0
         
@@ -56,9 +56,10 @@ class HourlyForecastCollectionViewCell: UICollectionViewCell {
     
     private lazy var probabilityOfPrecipitationLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 13, weight: .semibold)
+        label.font = .systemFont(ofSize: 12, weight: .semibold)
         label.textColor = .secondaryLabel
         label.numberOfLines = 1
+        label.setContentCompressionResistancePriority(.required, for: .vertical)
         
         return label
     }()
@@ -113,7 +114,7 @@ class HourlyForecastCollectionViewCell: UICollectionViewCell {
         if hourlyForecastItem.probabilityOfPrecipitation == 0 {
             probabilityOfPrecipitationLabel.text = " "
         } else {
-            probabilityOfPrecipitationLabel.text = "\(hourlyForecastItem.probabilityOfPrecipitation) %"
+            probabilityOfPrecipitationLabel.text = "\(hourlyForecastItem.probabilityOfPrecipitation)%"
         }
         
         temperatureLabel.text = "\(hourlyForecastItem.temperature)°"

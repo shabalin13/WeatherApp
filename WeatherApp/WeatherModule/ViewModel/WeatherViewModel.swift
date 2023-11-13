@@ -106,9 +106,12 @@ final class WeatherViewModel: WeatherViewModelProtocol {
             return HourlyForecastItem(date: hourlyForecast.datetime, timezone: hourlyForecastsInfo.timezone, iconName: iconName, temperature: Int(hourlyForecast.temperature.rounded()), probabilityOfPrecipitation: Int(hourlyForecast.probabilityOfPrecipitation * 100))
         }
         
-        let dailyForecastItems = dailyForecastsInfo.dailyForecasts.map { dailyForecast in
+        let temperatureTotalMin = Int(dailyForecastsInfo.dailyForecasts.min(by: { $0.temperatureMin < $1.temperatureMin })?.temperatureMin.rounded() ?? 0)
+        let temperatureTotalMax = Int(dailyForecastsInfo.dailyForecasts.max(by: { $0.temperatureMax < $1.temperatureMax })?.temperatureMax.rounded() ?? 0)
+        
+        let dailyForecastItems = dailyForecastsInfo.dailyForecasts.enumerated().map { idx, dailyForecast in
             let iconName = WeatherIDtoIconNameMapping(rawValue: dailyForecast.weatherID)!.iconName + "d"
-            return DailyForecastItem(date: dailyForecast.datetime, timezone: dailyForecastsInfo.timezone, iconName: iconName, temperatureMin: Int(dailyForecast.temperatureMin.rounded()), temperatureMax: Int(dailyForecast.temperatureMax.rounded()), probabilityOfPrecipitation: Int(dailyForecast.probabilityOfPrecipitation * 100))
+            return DailyForecastItem(isToday: idx == 0 ? true : false, date: dailyForecast.datetime, timezone: dailyForecastsInfo.timezone, iconName: iconName, temperatureMin: Int(dailyForecast.temperatureMin.rounded()), temperatureMax: Int(dailyForecast.temperatureMax.rounded()), probabilityOfPrecipitation: Int(dailyForecast.probabilityOfPrecipitation * 100), temperatureTotalMin: temperatureTotalMin, temperatureTotalMax: temperatureTotalMax)
         }
         
         let windItem = WindItem(speed: Int(currentWeather.windSpeed.rounded()), gust: Int(currentWeather.windGust.rounded()), deg: currentWeather.windDeg)
