@@ -24,5 +24,9 @@ struct WindItem: Hashable {
 //    var gustString: String {
 //        return "\(gust)"
 //    }
+//    
+//    var unitsString: String {
+//        return "m/s"
+//    }
     
 }

@@ -391,8 +391,8 @@
 				B685D4BE2AF4F873005F9C33 /* HourlyForecastCollectionViewCell.swift */,
 				B63CAC692AF7CD1D00CAFC23 /* DailyForecastCollectionViewCell.swift */,
 				B6F0E6F22AF814FF006B3CC8 /* WindCollectionViewCell.swift */,
-				B6BBABCE2AF9647F00A25939 /* SquareCollectionViewCell.swift */,
 				B6CA3A442AFD6305003BEF55 /* WindMiniCellView.swift */,
+				B6BBABCE2AF9647F00A25939 /* SquareCollectionViewCell.swift */,
 				B6CA3A4F2B027399003BEF55 /* SquareItemView */,
 			);
 			path = Cells;

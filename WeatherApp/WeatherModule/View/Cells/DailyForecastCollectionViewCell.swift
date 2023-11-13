@@ -14,7 +14,7 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
     
     private lazy var dateLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 20)
+        label.font = .systemFont(ofSize: 20, weight: .medium)
         label.numberOfLines = 1
         
         return label
@@ -59,7 +59,7 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
     
     private lazy var temperatureMinLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 20)
+        label.font = .systemFont(ofSize: 20, weight: .medium)
         label.numberOfLines = 1
         label.textAlignment = .right
         
@@ -80,7 +80,7 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
     
     private lazy var temperatureMaxLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 20)
+        label.font = .systemFont(ofSize: 20, weight: .medium)
         label.numberOfLines = 1
         label.textAlignment = .right
         
@@ -150,21 +150,9 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
     }
     
     func configureCell(dailyForecastItem: DailyForecastItem) {
-        
-        if dailyForecastItem.isToday {
-            dateLabel.text = "Today"
-        } else {
-            let date = Date(timeIntervalSince1970: TimeInterval(dailyForecastItem.date))
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "EE"
-            dateFormatter.timeZone = TimeZone(identifier: "UTC")
-            dateFormatter.timeZone = TimeZone(secondsFromGMT: dailyForecastItem.timezone)
-            dateLabel.text = dateFormatter.string(from: date)
-        }
-        
+        dateLabel.text = dailyForecastItem.dateString
         imageView.image = UIImage(named: dailyForecastItem.iconName)
-        
-        probabilityOfPrecipitationLabel.text = "\(dailyForecastItem.probabilityOfPrecipitation)%"
+        probabilityOfPrecipitationLabel.text = dailyForecastItem.probabilityOfPrecipitationString
         
         let minXValue = Double(dailyForecastItem.temperatureTotalMin)
         let maxXValue = Double(dailyForecastItem.temperatureTotalMax)
@@ -196,8 +184,8 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
         temperatureChartView.xAxis.axisMinimum = minXValue - 2
         temperatureChartView.xAxis.axisMaximum = maxXValue + 2
         
-        temperatureMinLabel.text = String("\(dailyForecastItem.temperatureMin)°")
-        temperatureMaxLabel.text = String("\(dailyForecastItem.temperatureMax)°")
+        temperatureMinLabel.text = dailyForecastItem.temperatureMinString
+        temperatureMaxLabel.text = dailyForecastItem.temperatureMaxString
         
     }
 }

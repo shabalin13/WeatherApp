@@ -102,22 +102,10 @@ class HourlyForecastCollectionViewCell: UICollectionViewCell {
     }
     
     func configureCell(hourlyForecastItem: HourlyForecastItem) {
-        let date = Date(timeIntervalSince1970: TimeInterval(hourlyForecastItem.date))
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH"
-        dateFormatter.timeZone = TimeZone(identifier: "UTC")
-        dateFormatter.timeZone = TimeZone(secondsFromGMT: hourlyForecastItem.timezone)
-        dateLabel.text = dateFormatter.string(from: date)
-        
+        dateLabel.text = hourlyForecastItem.dateString
         imageView.image = UIImage(named: hourlyForecastItem.iconName)
-        
-        if hourlyForecastItem.probabilityOfPrecipitation == 0 {
-            probabilityOfPrecipitationLabel.text = " "
-        } else {
-            probabilityOfPrecipitationLabel.text = "\(hourlyForecastItem.probabilityOfPrecipitation)%"
-        }
-        
-        temperatureLabel.text = "\(hourlyForecastItem.temperature)°"
+        probabilityOfPrecipitationLabel.text = hourlyForecastItem.probabilityOfPrecipitationString
+        temperatureLabel.text = hourlyForecastItem.temperatureString
     }
     
 }
