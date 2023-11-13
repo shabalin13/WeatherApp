@@ -17,8 +17,6 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
         label.font = .systemFont(ofSize: 20)
         label.numberOfLines = 1
         
-//        label.backgroundColor = .red.withAlphaComponent(0.5)
-        
         return label
     }()
     
@@ -29,16 +27,12 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
         stackView.alignment = .center
         stackView.spacing = 0
         
-//        stackView.backgroundColor = .brown.withAlphaComponent(0.5)
-        
         return stackView
     }()
     
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
-        
-//        imageView.backgroundColor = .red.withAlphaComponent(0.5)
         
         return imageView
     }()
@@ -48,10 +42,7 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
         label.font = .systemFont(ofSize: 10, weight: .semibold)
         label.textColor = .secondaryLabel
         label.numberOfLines = 1
-        
         label.setContentCompressionResistancePriority(.required, for: .vertical)
-        
-//        label.backgroundColor = .yellow.withAlphaComponent(0.5)
         
         return label
     }()
@@ -72,8 +63,6 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
         label.numberOfLines = 1
         label.textAlignment = .right
         
-//        label.backgroundColor = .yellow.withAlphaComponent(0.5)
-        
         return label
     }()
     
@@ -86,8 +75,6 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
         chartView.rightAxis.enabled = false
         chartView.isUserInteractionEnabled = false
         
-//        chartView.backgroundColor = .red.withAlphaComponent(0.5)
-        
         return chartView
     }()
     
@@ -96,8 +83,6 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
         label.font = .systemFont(ofSize: 20)
         label.numberOfLines = 1
         label.textAlignment = .right
-        
-//        label.backgroundColor = .orange.withAlphaComponent(0.5)
         
         return label
     }()
