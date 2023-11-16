@@ -17,16 +17,16 @@ class WindCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
     
-    private lazy var firstWindMiniCell: WindMiniCellView = {
-        let cell = WindMiniCellView()
+    private lazy var firstWindMiniView: WindMiniView = {
+        let view = WindMiniView()
         
-        return cell
+        return view
     }()
     
-    private lazy var secondWindMiniCell: WindMiniCellView = {
-        let cell = WindMiniCellView()
+    private lazy var secondWindMiniView: WindMiniView = {
+        let view = WindMiniView()
         
-        return cell
+        return view
     }()
     
     private lazy var lineView: UIView = {
@@ -42,36 +42,36 @@ class WindCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        addSubview(firstWindMiniCell)
+        addSubview(firstWindMiniView)
         addSubview(lineView)
-        addSubview(secondWindMiniCell)
+        addSubview(secondWindMiniView)
         addSubview(imageView)
         
-        firstWindMiniCell.translatesAutoresizingMaskIntoConstraints = false
+        firstWindMiniView.translatesAutoresizingMaskIntoConstraints = false
         lineView.translatesAutoresizingMaskIntoConstraints = false
-        secondWindMiniCell.translatesAutoresizingMaskIntoConstraints = false
+        secondWindMiniView.translatesAutoresizingMaskIntoConstraints = false
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            firstWindMiniCell.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
-            firstWindMiniCell.topAnchor.constraint(equalTo: self.topAnchor),
+            firstWindMiniView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
+            firstWindMiniView.topAnchor.constraint(equalTo: self.topAnchor),
             
             imageView.topAnchor.constraint(equalTo: self.topAnchor),
             imageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5),
             imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1),
             
-            lineView.leadingAnchor.constraint(equalTo: firstWindMiniCell.leadingAnchor),
-            lineView.topAnchor.constraint(equalTo: firstWindMiniCell.bottomAnchor, constant: 5),
-            lineView.trailingAnchor.constraint(equalTo: firstWindMiniCell.trailingAnchor),
+            lineView.leadingAnchor.constraint(equalTo: firstWindMiniView.leadingAnchor),
+            lineView.topAnchor.constraint(equalTo: firstWindMiniView.bottomAnchor, constant: 5),
+            lineView.trailingAnchor.constraint(equalTo: firstWindMiniView.trailingAnchor),
             
-            secondWindMiniCell.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
-            secondWindMiniCell.topAnchor.constraint(equalTo: lineView.bottomAnchor, constant: 5),
-            secondWindMiniCell.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            secondWindMiniView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
+            secondWindMiniView.topAnchor.constraint(equalTo: lineView.bottomAnchor, constant: 5),
+            secondWindMiniView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             
-            firstWindMiniCell.trailingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: -5),
-            secondWindMiniCell.trailingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: -5),
-            secondWindMiniCell.heightAnchor.constraint(equalTo: firstWindMiniCell.heightAnchor, multiplier: 1),
+            firstWindMiniView.trailingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: -5),
+            secondWindMiniView.trailingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: -5),
+            secondWindMiniView.heightAnchor.constraint(equalTo: firstWindMiniView.heightAnchor, multiplier: 1),
         ])
         
     }
@@ -82,8 +82,8 @@ class WindCollectionViewCell: UICollectionViewCell {
     }
     
     func configureCell(windItem: WindItem) {
-        firstWindMiniCell.configureCell(windSpeed: windItem.speed, windName: "Wind", windUnit: "m/s")
-        secondWindMiniCell.configureCell(windSpeed: windItem.gust, windName: "Gust", windUnit: "m/s")
+        firstWindMiniView.configureView(wind: windItem.speedString, windName: "Wind", windUnit: windItem.unitsString)
+        secondWindMiniView.configureView(wind: windItem.gustString, windName: "Gust", windUnit: windItem.unitsString)
         imageView.image = UIImage(systemName: "safari")
         imageView.tintColor = .black
     }

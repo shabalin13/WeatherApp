@@ -7,26 +7,26 @@
 
 struct WindItem: Hashable {
     
-    /*private*/ let speed: Int
-    /*private*/ let gust: Int
-    /*private*/ let deg: Int
+    private let speed: Int
+    private let gust: Int
+    private let deg: Int
     
-//    init(speed: Int, gust: Int, deg: Int) {
-//        self.speed = speed
-//        self.gust = gust
-//        self.deg = deg
-//    }
-//    
-//    var speedString: String {
-//        return "\(speed)"
-//    }
-//    
-//    var gustString: String {
-//        return "\(gust)"
-//    }
-//    
-//    var unitsString: String {
-//        return "m/s"
-//    }
+    init(speed: Int, gust: Int, deg: Int) {
+        self.speed = speed
+        self.gust = gust
+        self.deg = deg
+    }
+    
+    var speedString: String {
+        return "\(speed)"
+    }
+    
+    var gustString: String {
+        return "\(gust)"
+    }
+    
+    var unitsString: String {
+        return "m/s"
+    }
     
 }
