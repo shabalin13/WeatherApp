@@ -7,6 +7,7 @@
 
 struct WeatherItem: Hashable {
     
+    let currentWeatherItem: CurrentWeatherItem
     let hourlyForecastItems: HourlyForecastItems
     let dailyForecastItems: DailyForecastItems
     let windItem: WindItem

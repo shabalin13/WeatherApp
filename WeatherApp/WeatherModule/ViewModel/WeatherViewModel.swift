@@ -101,6 +101,8 @@ final class WeatherViewModel: WeatherViewModelProtocol {
     
     private func createWeatherItem(currentWeather: CurrentWeather, hourlyForecastsInfo: HourlyForecastsInfo, dailyForecastsInfo: DailyForecastsInfo) -> WeatherItem {
         
+        let currentWeatherItem = CurrentWeatherItem(isCurrentCity: true, cityName: currentWeather.cityName, temperature: Int(currentWeather.temperature.rounded()), weatherName: currentWeather.weatherName, temperatureMin: Int(currentWeather.temperatureMin.rounded()), temperatureMax: Int(currentWeather.temperatureMax.rounded()))
+        
         let hourlyForecastItems = hourlyForecastsInfo.hourlyForecasts.map { hourlyForecast in
             let iconName = WeatherIDtoIconNameMapping(rawValue: hourlyForecast.weatherID)!.iconName + hourlyForecast.partOfDay
             return HourlyForecastItem(date: hourlyForecast.datetime, timezone: hourlyForecastsInfo.timezone, iconName: iconName, temperature: Int(hourlyForecast.temperature.rounded()), probabilityOfPrecipitation: Int(hourlyForecast.probabilityOfPrecipitation * 100))
@@ -137,7 +139,7 @@ final class WeatherViewModel: WeatherViewModelProtocol {
         let precipitationItem = PrecipitationItem(precipitation: precipitation, expectedPrecipitation: expectedPrecipitation)
         
         
-        return WeatherItem(hourlyForecastItems: hourlyForecastItems, dailyForecastItems: dailyForecastItems, windItem: windItem, feelsTemperatureItem: feelsTemperatureItem, visibilityItem: visibilityItem, sunItem: sunItem, humidityItem: humidityItem, pressureItem: pressureItem, precipitationItem: precipitationItem)
+        return WeatherItem(currentWeatherItem: currentWeatherItem, hourlyForecastItems: hourlyForecastItems, dailyForecastItems: dailyForecastItems, windItem: windItem, feelsTemperatureItem: feelsTemperatureItem, visibilityItem: visibilityItem, sunItem: sunItem, humidityItem: humidityItem, pressureItem: pressureItem, precipitationItem: precipitationItem)
         
     }
     

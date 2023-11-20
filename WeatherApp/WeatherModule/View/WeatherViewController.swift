@@ -39,12 +39,13 @@ class WeatherViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.viewModel.getWeather()
     }
     
     // MARK: Functions to set up view
     private func setupView() {
-        self.navigationItem.title = "Weather"
+//        self.navigationController?.navigationBar.scrollEdgeAppearance = self.navigationController?.navigationBar.standardAppearance
         self.view.backgroundColor = .systemBackground
         
         setupToolBar()
@@ -52,6 +53,11 @@ class WeatherViewController: UIViewController {
     
     private func setupToolBar() {
         self.navigationController?.isToolbarHidden = false
+        if #available(iOS 15.0, *) {
+            self.navigationController?.toolbar.scrollEdgeAppearance = self.navigationController?.toolbar.standardAppearance
+        } else {
+            self.navigationController?.toolbar.compactAppearance = self.navigationController?.toolbar.standardAppearance
+        }
         
         var items = [UIBarButtonItem]()
         items.append(
@@ -73,7 +79,6 @@ class WeatherViewController: UIViewController {
             self.createSnapshot(weatherItem: weatherItem)
         })
         .disposed(by: disposeBag)
-        
     }
     
     // MARK: CollectionView functions
@@ -85,6 +90,7 @@ class WeatherViewController: UIViewController {
         collectionView.register(WeatherSectionHeaderView.self, forSupplementaryViewOfKind: SupplementaryViewKind.header, withReuseIdentifier: WeatherSectionHeaderView.reuseIdentifier)
         collectionView.register(WeatherLineView.self, forSupplementaryViewOfKind: SupplementaryViewKind.line, withReuseIdentifier: WeatherLineView.reuseIdentifier)
         
+        collectionView.register(CurrentWeatherCollectionViewCell.self, forCellWithReuseIdentifier: CurrentWeatherCollectionViewCell.reuseIdentifier)
         collectionView.register(HourlyForecastCollectionViewCell.self, forCellWithReuseIdentifier: HourlyForecastCollectionViewCell.reuseIdentifier)
         collectionView.register(DailyForecastCollectionViewCell.self, forCellWithReuseIdentifier: DailyForecastCollectionViewCell.reuseIdentifier)
         collectionView.register(WindCollectionViewCell.self, forCellWithReuseIdentifier: WindCollectionViewCell.reuseIdentifier)
@@ -111,7 +117,6 @@ class WeatherViewController: UIViewController {
             
             let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(38))
             let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize, elementKind: SupplementaryViewKind.header, alignment: .top)
-//            headerItem.pinToVisibleBounds = true
             
             let lineItemHeight = 1 / layoutEnvironment.traitCollection.displayScale
             let lineItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(lineItemHeight))
@@ -119,8 +124,17 @@ class WeatherViewController: UIViewController {
             lineItem.contentInsets = .init(top: 0, leading: 10, bottom: 0, trailing: 10)
             
             switch sectionIdentifier {
-            case .main:
-                return nil
+            case .currentWeather:
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(200))
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+                
+                let section = NSCollectionLayoutSection(group: group)
+                section.contentInsets = .init(top: 20, leading: 10, bottom: 20, trailing: 10)
+                
+                return section
             case .hourlyForecasts:
                 let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -175,6 +189,7 @@ class WeatherViewController: UIViewController {
                 group.interItemSpacing = .fixed(10)
                 
                 let section = NSCollectionLayoutSection(group: group)
+                section.contentInsets = .init(top: 0, leading: 0, bottom: 10, trailing: 0)
                 section.interGroupSpacing = 10
                 
                 return section
@@ -195,6 +210,10 @@ class WeatherViewController: UIViewController {
         let dataSource = UICollectionViewDiffableDataSource<WeatherSectionIdentifier, WeatherItemIdentifier>.init(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
             let section = self.viewModel.sections[indexPath.section]
             switch section {
+            case .currentWeather:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CurrentWeatherCollectionViewCell.reuseIdentifier, for: indexPath) as! CurrentWeatherCollectionViewCell
+                cell.configureCell(currentWeatherItem: itemIdentifier.currentWeather!)
+                return cell
             case .hourlyForecasts:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HourlyForecastCollectionViewCell.reuseIdentifier, for: indexPath) as! HourlyForecastCollectionViewCell
                 cell.configureCell(hourlyForecastItem: itemIdentifier.hourlyForecast!)
@@ -211,8 +230,6 @@ class WeatherViewController: UIViewController {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SquareCollectionViewCell.reuseIdentifier, for: indexPath) as! SquareCollectionViewCell
                 cell.configureCell(squareItemIdentifier: itemIdentifier.squares!)
                 return cell
-            default:
-                return nil
             }
         })
         
@@ -223,7 +240,7 @@ class WeatherViewController: UIViewController {
             let sectionTitleName: String
             
             switch section {
-            case .main:
+            case .currentWeather, .squares:
                 return nil
             case .hourlyForecasts(let imageName, let titleName):
                 sectionImageName = imageName
@@ -234,8 +251,6 @@ class WeatherViewController: UIViewController {
             case .wind(let imageName, let titleName):
                 sectionImageName = imageName
                 sectionTitleName = titleName
-            case .squares:
-                return nil
             }
             
             if kind == SupplementaryViewKind.header {
@@ -256,12 +271,13 @@ class WeatherViewController: UIViewController {
         
         var snapshot = NSDiffableDataSourceSnapshot<WeatherSectionIdentifier, WeatherItemIdentifier>()
         
+        let currenWeatherSection = WeatherSectionIdentifier.currentWeather
         let hourlyForecastsSection = WeatherSectionIdentifier.hourlyForecasts(imageName: "clock", titleName: "Hourly forecast")
         let dailyForecastsSection = WeatherSectionIdentifier.dailyForecasts(imageName: "calendar", titleName: "10-day forecast")
         let windSection = WeatherSectionIdentifier.wind(imageName: "wind", titleName: "Wind")
         let squaresSection = WeatherSectionIdentifier.squares
         
-        snapshot.appendSections([hourlyForecastsSection, dailyForecastsSection, windSection, squaresSection])
+        snapshot.appendSections([currenWeatherSection, hourlyForecastsSection, dailyForecastsSection, windSection, squaresSection])
         
         let hourlyForecastItems = weatherItem.hourlyForecastItems.map { hourlyForecastItem in
             WeatherItemIdentifier.hourlyForecast(hourlyForecastItem)
@@ -271,6 +287,7 @@ class WeatherViewController: UIViewController {
             WeatherItemIdentifier.dailyForecast(dailyForecastItem)
         }
         
+        snapshot.appendItems([WeatherItemIdentifier.currentWeather(weatherItem.currentWeatherItem)], toSection: currenWeatherSection)
         snapshot.appendItems(hourlyForecastItems, toSection: hourlyForecastsSection)
         snapshot.appendItems(dailyForecastItems, toSection: dailyForecastsSection)
         snapshot.appendItems([WeatherItemIdentifier.wind(weatherItem.windItem)], toSection: windSection)

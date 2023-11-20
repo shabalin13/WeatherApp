@@ -7,7 +7,7 @@
 
 enum WeatherSectionIdentifier: Hashable {
     
-    case main
+    case currentWeather
     case hourlyForecasts(imageName: String, titleName: String)
     case dailyForecasts(imageName: String, titleName: String)
     case wind(imageName: String, titleName: String)
