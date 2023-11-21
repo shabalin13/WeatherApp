@@ -25,7 +25,7 @@ final class WeatherViewModel: WeatherViewModelProtocol {
     private var coordinator: WeatherCoordinatorProtocol
     private var networkService: NetworkServiceProtocol = NetworkService()
     
-    private let cityName = "Kazan"
+    private let cityName = "Almetyevsk"
     
     private var currentWeather: CurrentWeather?
     private var hourlyForecastsInfo: HourlyForecastsInfo?

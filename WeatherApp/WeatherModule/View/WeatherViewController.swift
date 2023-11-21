@@ -33,26 +33,30 @@ class WeatherViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupView()
         subscribe()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        setupView()
         self.viewModel.getWeather()
     }
     
     // MARK: Functions to set up view
     private func setupView() {
-//        self.navigationController?.navigationBar.scrollEdgeAppearance = self.navigationController?.navigationBar.standardAppearance
         self.view.backgroundColor = .systemBackground
         
-        setupToolBar()
+        setupNavigationBar()
+        setupToolbar()
     }
     
-    private func setupToolBar() {
-        self.navigationController?.isToolbarHidden = false
+    private func setupNavigationBar() {
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
+    private func setupToolbar() {
+        self.navigationController?.setToolbarHidden(false, animated: false)
+        
         if #available(iOS 15.0, *) {
             self.navigationController?.toolbar.scrollEdgeAppearance = self.navigationController?.toolbar.standardAppearance
         } else {
