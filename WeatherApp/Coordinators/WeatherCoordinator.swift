@@ -35,9 +35,9 @@ final class WeatherCoordinator: WeatherCoordinatorProtocol {
     }
     
     func goToCities() {
-        let citiesCoordinator = CitiesCoordinator(parentCoordinator: self, navigationController: navigationController)
-        childCoordinators.append(citiesCoordinator)
-        citiesCoordinator.start()
+//        let citiesCoordinator = CitiesCoordinator(parentCoordinator: self, navigationController: navigationController)
+//        childCoordinators.append(citiesCoordinator)
+//        citiesCoordinator.start()
     }
     
     func childDidFinish(childCoordinator: Coordinator) {

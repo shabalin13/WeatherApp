@@ -7,7 +7,7 @@
 
 protocol CitiesViewModelProtocol {
     
-    func comeBackFromCities()
+//    func comeBackFromCities()
     
 }
 
@@ -19,9 +19,9 @@ final class CitiesViewModel: CitiesViewModelProtocol {
         self.coordinator = coordinator
     }
     
-    func comeBackFromCities() {
-        coordinator.comeBackFromCities()
-    }
+//    func comeBackFromCities() {
+//        coordinator.comeBackFromCities()
+//    }
     
     deinit {
         print("CitiesViewModel deinit")

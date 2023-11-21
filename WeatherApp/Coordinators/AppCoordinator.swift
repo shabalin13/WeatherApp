@@ -25,9 +25,13 @@ final class AppCoordinator: AppCoordinatorProtocol {
         
         let navigationController = UINavigationController()
         
-        let weatherCoordinator = WeatherCoordinator(parentCoordinator: self, navigationController: navigationController)
-        childCoordinators.append(weatherCoordinator)
-        weatherCoordinator.start()
+//        let weatherCoordinator = WeatherCoordinator(parentCoordinator: self, navigationController: navigationController)
+//        childCoordinators.append(weatherCoordinator)
+//        weatherCoordinator.start()
+        
+        let citiesCoordinator = CitiesCoordinator(parentCoordinator: self, navigationController: navigationController)
+        childCoordinators.append(citiesCoordinator)
+        citiesCoordinator.start()
         
         window.rootViewController = navigationController
         window.makeKeyAndVisible()

@@ -127,7 +127,7 @@ class CitiesViewController: UIViewController {
     }
     
     @objc func comeBackFromCities() {
-        viewModel.comeBackFromCities()
+//        viewModel.comeBackFromCities()
     }
     
     deinit {

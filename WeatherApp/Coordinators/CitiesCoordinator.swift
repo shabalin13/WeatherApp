@@ -9,19 +9,22 @@ import UIKit
 
 protocol CitiesCoordinatorProtocol: Coordinator {
     
-    var parentCoordinator: WeatherCoordinatorProtocol { get }
+//    var parentCoordinator: WeatherCoordinatorProtocol { get }
+    var parentCoordinator: AppCoordinatorProtocol { get }
     
-    func comeBackFromCities()
+//    func comeBackFromCities()
     
 }
 
 final class CitiesCoordinator: CitiesCoordinatorProtocol {
     
     private(set) var childCoordinators: [Coordinator] = []
-    private(set) var parentCoordinator: WeatherCoordinatorProtocol
+//    private(set) var parentCoordinator: WeatherCoordinatorProtocol
+    private(set) var parentCoordinator: AppCoordinatorProtocol
     private let navigationController: UINavigationController
     
-    init(parentCoordinator: WeatherCoordinatorProtocol, navigationController: UINavigationController) {
+//    init(parentCoordinator: WeatherCoordinatorProtocol, navigationController: UINavigationController) {
+    init(parentCoordinator: AppCoordinatorProtocol, navigationController: UINavigationController) {
         self.parentCoordinator = parentCoordinator
         self.navigationController = navigationController
     }
@@ -33,10 +36,10 @@ final class CitiesCoordinator: CitiesCoordinatorProtocol {
         navigationController.pushViewController(citiesViewController, animated: true)
     }
     
-    func comeBackFromCities() {
-        navigationController.popViewController(animated: true)
-        parentCoordinator.childDidFinish(childCoordinator: self)
-    }
+//    func comeBackFromCities() {
+//        navigationController.popViewController(animated: true)
+//        parentCoordinator.childDidFinish(childCoordinator: self)
+//    }
     
     deinit {
         print("CitiesCoordinator deinit")
