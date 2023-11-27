@@ -7,6 +7,7 @@
 
 protocol CitiesViewModelProtocol {
     
+    func getCitiesInfo()
 //    func comeBackFromCities()
     
 }
@@ -17,6 +18,12 @@ final class CitiesViewModel: CitiesViewModelProtocol {
     
     init(coordinator: CitiesCoordinatorProtocol) {
         self.coordinator = coordinator
+    }
+    
+    func getCitiesInfo() {
+        NetworkService().getCitiesInfo(cityName: "Ka", userLocation: (55.79, 49.10)) { result in
+            print(result)
+        }
     }
     
 //    func comeBackFromCities() {

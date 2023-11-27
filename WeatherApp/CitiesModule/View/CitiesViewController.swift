@@ -35,6 +35,7 @@ class CitiesViewController: UIViewController {
         super.viewWillAppear(animated)
         setupView()
         createSnapshot(cityWeatherItems: [CityWeatherItem(isCurrentCity: true, cityName: "Kazan", temperature: -4, weatherName: "Snow", temperatureMin: -9, temperatureMax: -2)])
+        viewModel.getCitiesInfo()
     }
     
     private func setupView() {

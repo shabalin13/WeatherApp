@@ -13,6 +13,8 @@ enum NetworkRouter {
     case currentWeather(cityName: String)
     case hourlyForecastsInfo(cityName: String, hoursCount: Int)
     case dailyForecastsInfo(cityName: String, daysCount: Int)
+    case mapsAccessToken
+    case citiesInfo(mapsAccessToken: MapsAccessToken, cityName: String, userLocation: (latitude: Double, longitude: Double))
     
     var baseURL: URL {
         switch self {
@@ -20,6 +22,8 @@ enum NetworkRouter {
             return URL(string: "https://api.openweathermap.org")!
         case .hourlyForecastsInfo:
             return URL(string: "https://pro.openweathermap.org")!
+        case .mapsAccessToken, .citiesInfo:
+            return URL(string: "https://maps-api.apple.com")!
         }
     }
     
@@ -31,6 +35,10 @@ enum NetworkRouter {
             return "data/2.5/forecast/hourly"
         case .dailyForecastsInfo:
             return "data/2.5/forecast/daily"
+        case .mapsAccessToken:
+            return "v1/token"
+        case .citiesInfo:
+            return "v1/searchAutocomplete"
         }
     }
     
@@ -38,6 +46,19 @@ enum NetworkRouter {
         switch self {
         case .currentWeather, .hourlyForecastsInfo, .dailyForecastsInfo:
             return .get
+        case .mapsAccessToken, .citiesInfo:
+            return .get
+        }
+    }
+    
+    var headers: [String: String]? {
+        switch self {
+        case .currentWeather, .hourlyForecastsInfo, .dailyForecastsInfo:
+            return nil
+        case .mapsAccessToken:
+            return ["Authorization": "Bearer \(Constants.NetworkServiceConstants.jwtToken)"]
+        case .citiesInfo(let mapsAccessToken, _, _):
+            return ["Authorization": "Bearer \(mapsAccessToken.token)"]
         }
     }
     
@@ -60,6 +81,14 @@ enum NetworkRouter {
                     "lang": Constants.NetworkServiceConstants.lang,
                     "units": Constants.NetworkServiceConstants.units,
                     "appid": Constants.NetworkServiceConstants.APIkey]
+        case .mapsAccessToken:
+            return [:]
+        case .citiesInfo(_, let cityName, let userLocation):
+            return ["q": cityName,
+                    "userLocation": "\(userLocation.latitude),\(userLocation.longitude)",
+                    "lang": Constants.NetworkServiceConstants.lang,
+                    "includePoiCategories": Constants.NetworkServiceConstants.includePoiCategories,
+                    "resultTypeFilter": Constants.NetworkServiceConstants.resultTypeFilter]
         }
     }
     
@@ -70,10 +99,11 @@ extension NetworkRouter: URLRequestConvertible {
     func asURLRequest() throws -> URLRequest {
         let url = baseURL.appendingPathComponent(path)
         var request = URLRequest(url: url)
+        request.allHTTPHeaderFields = headers
         request.method = method
         request = try URLEncodedFormParameterEncoder(destination: .methodDependent).encode(parameters, into: request)
         
-//        print(request)
+        print(request)
         
         return request
     }
