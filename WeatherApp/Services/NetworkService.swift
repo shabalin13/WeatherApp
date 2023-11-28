@@ -7,6 +7,7 @@
 
 import Foundation
 import Alamofire
+import Dispatch
 
 protocol NetworkServiceProtocol {
     
@@ -18,7 +19,7 @@ protocol NetworkServiceProtocol {
 }
 
 final class NetworkService: NetworkServiceProtocol {
-   
+    
     enum NetworkServiceError: Error, LocalizedError {
         case getCurrentWeatherFailed
         case getHourlyForecastsInfoFailed
@@ -28,7 +29,7 @@ final class NetworkService: NetworkServiceProtocol {
     }
     
     func getCurrentWeather(cityName: String, completionHandler: @escaping (Result<CurrentWeather, Error>) -> Void) {
-        AF.request(NetworkRouter.currentWeather(cityName: cityName)).validate().responseDecodable(of: CurrentWeather.self) { response in
+        AF.request(NetworkRouter.currentWeather(cityName: cityName)).validate().responseDecodable(of: CurrentWeather.self, queue: .global()) { response in
             switch response.result {
             case .success(let currentWeather):
                 completionHandler(.success(currentWeather))
@@ -39,7 +40,7 @@ final class NetworkService: NetworkServiceProtocol {
     }
     
     func getHourlyForecastsInfo(cityName: String, hoursCount: Int, completionHandler: @escaping (Result<HourlyForecastsInfo, Error>) -> Void) {
-        AF.request(NetworkRouter.hourlyForecastsInfo(cityName: cityName, hoursCount: hoursCount)).validate().responseDecodable(of: HourlyForecastsInfo.self) { response in
+        AF.request(NetworkRouter.hourlyForecastsInfo(cityName: cityName, hoursCount: hoursCount)).validate().responseDecodable(of: HourlyForecastsInfo.self, queue: .global()) { response in
             switch response.result {
             case .success(let hourlyForecastsInfo):
                 completionHandler(.success(hourlyForecastsInfo))
@@ -50,7 +51,7 @@ final class NetworkService: NetworkServiceProtocol {
     }
     
     func getDailyForecastsInfo(cityName: String, daysCount: Int, completionHandler: @escaping (Result<DailyForecastsInfo, Error>) -> Void) {
-        AF.request(NetworkRouter.dailyForecastsInfo(cityName: cityName, daysCount: daysCount)).validate().responseDecodable(of: DailyForecastsInfo.self) { response in
+        AF.request(NetworkRouter.dailyForecastsInfo(cityName: cityName, daysCount: daysCount)).validate().responseDecodable(of: DailyForecastsInfo.self, queue: .global()) { response in
             switch response.result {
             case .success(let dailyForecastsInfo):
                 completionHandler(.success(dailyForecastsInfo))
@@ -61,10 +62,9 @@ final class NetworkService: NetworkServiceProtocol {
     }
     
     private func getMapsAccessToken(completionHandler: @escaping (Swift.Result<MapsAccessToken, Error>) -> Void) {
-        AF.request(NetworkRouter.mapsAccessToken).validate().responseDecodable(of: MapsAccessToken.self) { response in
+        AF.request(NetworkRouter.mapsAccessToken).validate().responseDecodable(of: MapsAccessToken.self, queue: .global()) { response in
             switch response.result {
             case .success(let mapsAccessToken):
-                print(mapsAccessToken)
                 completionHandler(.success(mapsAccessToken))
             case .failure(_):
                 completionHandler(.failure(NetworkServiceError.getMapsAccessTokenFailed))
@@ -73,10 +73,10 @@ final class NetworkService: NetworkServiceProtocol {
     }
     
     func getCitiesInfo(cityName: String, userLocation: (latitude: Double, longitude: Double), completionHandler: @escaping (Result<CitiesInfo, Error>) -> Void) {
-        getMapsAccessToken { result in
+        self.getMapsAccessToken { result in
             switch result {
             case .success(let mapsAccessToken):
-                AF.request(NetworkRouter.citiesInfo(mapsAccessToken: mapsAccessToken, cityName: cityName, userLocation: userLocation)).validate().responseDecodable(of: CitiesInfo.self) { response in
+                AF.request(NetworkRouter.citiesInfo(mapsAccessToken: mapsAccessToken, cityName: cityName, userLocation: userLocation)).validate().responseDecodable(of: CitiesInfo.self, queue: .global()) { response in
                     switch response.result {
                     case .success(let citiesInfo):
                         completionHandler(.success(citiesInfo))

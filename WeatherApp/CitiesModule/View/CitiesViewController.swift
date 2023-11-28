@@ -6,10 +6,12 @@
 //
 
 import UIKit
+import RxSwift
 
 class CitiesViewController: UIViewController {
     
     private var viewModel: CitiesViewModelProtocol
+    private let disposeBag = DisposeBag()
     
     private lazy var searchController = UISearchController(searchResultsController: SearchResultsViewController())
     
@@ -28,14 +30,20 @@ class CitiesViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        subscribe()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupView()
         createSnapshot(cityWeatherItems: [CityWeatherItem(isCurrentCity: true, cityName: "Kazan", temperature: -4, weatherName: "Snow", temperatureMin: -9, temperatureMax: -2)])
-        viewModel.getCitiesInfo()
+    }
+    
+    private func subscribe() {
+        viewModel.cityItems.subscribe(onNext: { cityItems in
+            self.updateSearchResultsController(cityItems: cityItems)
+        })
+        .disposed(by: disposeBag)
     }
     
     private func setupView() {
@@ -67,6 +75,7 @@ class CitiesViewController: UIViewController {
         searchController.searchResultsUpdater = self
         navigationItem.hidesSearchBarWhenScrolling = false
     }
+    
     
     private func createCollectionView() -> UICollectionView {
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
@@ -127,6 +136,12 @@ class CitiesViewController: UIViewController {
         dataSource.apply(snapshot)
     }
     
+    private func updateSearchResultsController(cityItems: CityItems) {
+        if let searchResultsController = searchController.searchResultsController as? SearchResultsViewController {
+            searchResultsController.updateView(cityItems: cityItems)
+        }
+    }
+    
     @objc func comeBackFromCities() {
 //        viewModel.comeBackFromCities()
     }
@@ -141,7 +156,32 @@ class CitiesViewController: UIViewController {
 extension CitiesViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
-        print(searchController.searchBar.text ?? "nil")
+        if let cityName = searchController.searchBar.text, !cityName.isEmpty {
+            print(cityName)
+            viewModel.getCitiesInfo(cityName: cityName)
+        } else if let searchResultsController = searchController.searchResultsController as? SearchResultsViewController {
+            searchResultsController.updateView(cityItems: [])
+        }
     }
     
 }
+
+
+//extension CitiesViewController: UISearchBarDelegate {
+//    
+//    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+//        print("searchBarTextDidBeginEditing")
+//        searchBar.delegate = self
+//    }
+//    
+//}
+
+
+//extension CitiesViewController: UISearchControllerDelegate {
+//    
+//    func willPresentSearchController(_ searchController: UISearchController) {
+//        print("willPresentSearchController")
+//        searchController.searchBar.becomeFirstResponder()
+//    }
+//    
+//}
